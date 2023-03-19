@@ -28,7 +28,7 @@ public class LinkValidator implements Handler {
         if (!urlChecker.isValidURL(link))
             throw new RuntimeException();
         if (nextHandler != null)
-            nextHandler.handle(link);
+            return nextHandler.handle(link);
         return null;
     }
 

@@ -1,12 +1,18 @@
 package ru.tinkoff.edu.java.parser.results;
 
-import ru.tinkoff.edu.java.parser.links.LinkType;
-import ru.tinkoff.edu.java.parser.links.StackOverflowLink;
+import org.hibernate.validator.internal.util.stereotypes.Lazy;
 
-public class StackOverflowParseResult implements ParseResult {
-    private final LinkType linkType = new StackOverflowLink();
-    @Override
-    public LinkType getLinkType() {
-        return linkType;
+import java.util.Optional;
+
+public class StackOverflowParseResult extends ParseResult {
+    private int questionId = Integer.MIN_VALUE;
+    public StackOverflowParseResult(String url) {
+        super(url);
     }
+
+    public int getQuestionId() {
+        System.out.println(questionId);
+        return questionId;
+    }
+
 }

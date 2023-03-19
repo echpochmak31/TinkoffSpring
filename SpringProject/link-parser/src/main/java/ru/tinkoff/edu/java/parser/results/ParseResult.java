@@ -1,7 +1,15 @@
 package ru.tinkoff.edu.java.parser.results;
 
-import ru.tinkoff.edu.java.parser.links.LinkType;
+import jakarta.validation.constraints.NotNull;
 
-public interface ParseResult {
-    LinkType getLinkType();
+public abstract class ParseResult {
+    protected final String url;
+
+    public ParseResult(@NotNull String url) {
+        this.url = url;
+    }
+    public String getUrl() {
+        return url;
+    }
 }
+

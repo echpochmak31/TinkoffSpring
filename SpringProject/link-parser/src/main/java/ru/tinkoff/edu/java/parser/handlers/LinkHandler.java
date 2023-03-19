@@ -14,10 +14,14 @@ public class LinkHandler<T extends ParseResult> implements Handler {
 
     public LinkHandler(
             @NotNull Predicate<String> patternMatcher,
-            @NotNull Class<? extends T> type) throws NoSuchMethodException {
+            @NotNull Class<? extends T> type)
+            throws
+            NoSuchMethodException {
+
         this.patternMatcher = patternMatcher;
-        ctor = type.getConstructor();
+        ctor = type.getConstructor(String.class);
         next = null;
+
     }
 
     @Override
@@ -26,12 +30,18 @@ public class LinkHandler<T extends ParseResult> implements Handler {
     }
 
     @Override
-    public ParseResult handle(@NotNull String link) throws InstantiationException, IllegalAccessException, InvocationTargetException {
+    public ParseResult handle(@NotNull String link)
+            throws
+            InstantiationException,
+            IllegalAccessException,
+            InvocationTargetException {
+
         if (patternMatcher.test(link))
-            return ctor.newInstance();
+            return ctor.newInstance(link);
         if (next != null)
             return next.handle(link);
         return null;
+
     }
 
 }
