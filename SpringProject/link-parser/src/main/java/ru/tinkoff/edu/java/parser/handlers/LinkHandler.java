@@ -30,18 +30,19 @@ public class LinkHandler<T extends ParseResult> implements Handler {
     }
 
     @Override
-    public ParseResult handle(@NotNull String link)
-            throws
-            InstantiationException,
-            IllegalAccessException,
-            InvocationTargetException {
-
-        if (patternMatcher.test(link))
-            return ctor.newInstance(link);
-        if (next != null)
-            return next.handle(link);
-        return null;
-
+    public ParseResult handle(@NotNull String link) {
+        try {
+            if (patternMatcher.test(link))
+                return ctor.newInstance(link);
+            if (next != null)
+                return next.handle(link);
+            return null;
+        }
+        catch (InstantiationException | IllegalAccessException | InvocationTargetException exception) {
+            var runtimeException = new RuntimeException();
+            runtimeException.addSuppressed(exception);
+            throw runtimeException;
+        }
     }
 
 }

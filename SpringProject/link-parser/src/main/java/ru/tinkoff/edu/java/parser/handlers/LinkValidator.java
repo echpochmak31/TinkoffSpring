@@ -24,12 +24,11 @@ public class LinkValidator implements Handler {
     }
 
     @Override
-    public ParseResult handle(@NotNull String link) throws InvocationTargetException, InstantiationException, IllegalAccessException {
-        if (!urlChecker.isValidURL(link))
-            throw new RuntimeException();
-        if (nextHandler != null)
-            return nextHandler.handle(link);
-        return null;
+    public ParseResult handle(@NotNull String link) {
+        if (!urlChecker.isValidURL(link) || nextHandler == null)
+            return null;
+
+        return nextHandler.handle(link);
     }
 
 }

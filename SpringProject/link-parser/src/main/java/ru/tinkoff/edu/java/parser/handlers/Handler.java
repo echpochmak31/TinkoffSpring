@@ -7,6 +7,6 @@ import java.lang.reflect.InvocationTargetException;
 public interface Handler {
     void setNext(Handler nextHandler);
 
-    ParseResult handle(String request) throws InstantiationException, IllegalAccessException, InvocationTargetException ;
+    ParseResult handle(String request);
 
 }
