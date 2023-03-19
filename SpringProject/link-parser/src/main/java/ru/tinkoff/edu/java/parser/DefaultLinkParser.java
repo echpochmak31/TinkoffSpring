@@ -16,7 +16,6 @@ public class DefaultLinkParser implements LinkParser {
 
     @Override
     public ParseResult parseLink(String link) {
-        ParseResult parseResult = null;
         try {
             return firstHandler.handle(link);
         }

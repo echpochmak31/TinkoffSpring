@@ -1,6 +1,5 @@
 package ru.tinkoff.edu.java.parser;
 
-
 import ru.tinkoff.edu.java.parser.handlers.GitHubLinkHandler;
 import ru.tinkoff.edu.java.parser.handlers.LinkValidator;
 import ru.tinkoff.edu.java.parser.handlers.StackOverflowLinkHandler;
