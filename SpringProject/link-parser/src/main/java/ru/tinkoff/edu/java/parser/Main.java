@@ -1,55 +1,37 @@
 package ru.tinkoff.edu.java.parser;
 
 
-import org.apache.commons.validator.routines.UrlValidator;
-import ru.tinkoff.edu.java.parser.handlers.DefaultUrlChecker;
-import ru.tinkoff.edu.java.parser.handlers.Handler;
-import ru.tinkoff.edu.java.parser.handlers.LinkHandler;
+import ru.tinkoff.edu.java.parser.handlers.GitHubLinkHandler;
 import ru.tinkoff.edu.java.parser.handlers.LinkValidator;
+import ru.tinkoff.edu.java.parser.handlers.StackOverflowLinkHandler;
+import ru.tinkoff.edu.java.parser.results.GitHubParseResult;
 import ru.tinkoff.edu.java.parser.results.StackOverflowParseResult;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.function.Predicate;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class Main {
-    public static void main(String[] args) throws IOException {
-        StackOverflowParseResult stackOverflowParseResult;
-        Handler h1 = new LinkValidator(new DefaultUrlChecker(new UrlValidator()));
-        try {
-            Handler h2 = new LinkHandler<>(Main::isValidURL, StackOverflowParseResult.class);
-            h1.setNext(h2);
-        }
-        catch (Exception exception) {
-            System.out.println(exception);
-        }
+    public static void main(String[] args) {
+        var link1 = "https://github.com/sanyarnd/tinkoff-java-course-2022/sdgsg";
+        var link2 = "https://stackoverflow.com/questions/1642028/what-is-the-operator-in-c";
+        var link3 = "https://stackoverflow.com/search?q=unsupported%20link";
 
-        String link = "https://stackoverflow.com/questions/6890565/how-do-i-decompose-a-url-into-its-component-parts-in-java";
-        stackOverflowParseResult = (StackOverflowParseResult) h1.handle(link);
+        var linkValidator = new LinkValidator();
+        var gitHubHandler = new GitHubLinkHandler();
+        var stackOverflowHandler = new StackOverflowLinkHandler();
 
-        URL url = new URL(link);
-        System.out.println(url.getPath());
+        linkValidator.setNext(gitHubHandler);
+        gitHubHandler.setNext(stackOverflowHandler);
 
-        String result = "";
-        Pattern regex = Pattern.compile("\\d+(?<=[^d])(?=/)");
-        Matcher regexMatcher = regex.matcher(link);
-        if (regexMatcher.find()) {
-            result = regexMatcher.group();
-        }
+        var linkParser = new DefaultLinkParser(linkValidator);
 
-        System.out.println(result);
+        var result1 = linkParser.parseLink(link1);
+        var result2 = linkParser.parseLink(link2);
+        var result3 = linkParser.parseLink(link3);
 
-    }
-
-    public static boolean isValidURL(String url) {
-        UrlValidator validator = new UrlValidator();
-        return validator.isValid(url);
-    }
-
-    public static boolean check(Predicate<String> predicate, String str) {
-        return predicate.test(str);
+        if (result1 instanceof GitHubParseResult gitHubParseResult)
+            System.out.println(gitHubParseResult);
+        if (result2 instanceof StackOverflowParseResult stackOverflowParseResult)
+            System.out.println(stackOverflowParseResult);
+        if (result3 instanceof StackOverflowParseResult stackOverflowParseResult)
+            System.out.println(stackOverflowParseResult);
+        else System.out.println(result3);
     }
 }
