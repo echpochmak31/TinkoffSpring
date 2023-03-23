@@ -1,11 +1,11 @@
 package ru.tinkoff.edu.java.parser.results;
 
-import jakarta.validation.constraints.NotNull;
+import lombok.NonNull;
 
 public abstract class ParseResult {
     protected final String url;
 
-    public ParseResult(@NotNull String url) {
+    public ParseResult(@NonNull String url) {
         this.url = url;
     }
     public String getUrl() {
