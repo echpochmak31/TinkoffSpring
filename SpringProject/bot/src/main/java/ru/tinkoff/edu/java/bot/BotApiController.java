@@ -12,7 +12,6 @@ import ru.tinkoff.edu.java.bot.dto.LinkUpdateResponse;
 
 @RestController
 @RequestMapping("/updates")
-@RequiredArgsConstructor
 public class BotApiController {
 
     @PostMapping
