@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.scrapper.dto;
+package ru.tinkoff.edu.java.scrapper.dto.links;
 
 import lombok.NonNull;
 import org.hibernate.validator.constraints.URL;

@@ -1,5 +1,6 @@
 package ru.tinkoff.edu.java.scrapper;
 
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Component;
@@ -19,40 +20,36 @@ import java.util.Objects;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ApiErrorResponse handleInvalidArgsRequest(MethodArgumentNotValidException exception, WebRequest request) {
-
-        return new ApiErrorResponse(
-                request.getDescription(false),
-                HttpStatus.BAD_REQUEST.toString(),
-                exception.getClass().getName(),
-                exception.getMessage(),
-                Arrays.stream(exception.getStackTrace()).map(Objects::toString).toArray(String[]::new));
+        return createApiErrorResponse(exception, request, HttpStatus.BAD_REQUEST);
     }
 
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = HttpMessageNotReadableException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ApiErrorResponse handleBadRequest(HttpMessageNotReadableException exception, WebRequest request) {
-
-        return new ApiErrorResponse(
-                request.getDescription(false),
-                HttpStatus.BAD_REQUEST.toString(),
-                exception.getClass().getName(),
-                exception.getMessage(),
-                Arrays.stream(exception.getStackTrace()).map(Objects::toString).toArray(String[]::new));
+        return createApiErrorResponse(exception, request, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = ResourceNotFoundException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public ApiErrorResponse handleNotFound(ResourceNotFoundException exception, WebRequest request) {
+        return createApiErrorResponse(exception, request, HttpStatus.NOT_FOUND);
+    }
 
+    @ExceptionHandler(value = ConstraintViolationException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ApiErrorResponse handleInvalidPathVariables(ConstraintViolationException exception, WebRequest request) {
+        return createApiErrorResponse(exception, request, HttpStatus.BAD_REQUEST);
+    }
+
+    private static ApiErrorResponse createApiErrorResponse(Exception exception, WebRequest request, HttpStatus status) {
         return new ApiErrorResponse(
                 request.getDescription(false),
-                HttpStatus.NOT_FOUND.toString() + " shit",
+                status.toString(),
                 exception.getClass().getName(),
                 exception.getMessage(),
                 Arrays.stream(exception.getStackTrace()).map(Objects::toString).toArray(String[]::new));
     }
-
 }

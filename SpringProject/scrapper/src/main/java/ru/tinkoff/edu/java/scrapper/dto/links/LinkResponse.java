@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.scrapper.dto;
+package ru.tinkoff.edu.java.scrapper.dto.links;
 
 import jakarta.validation.constraints.Min;
 import lombok.NonNull;
