@@ -12,6 +12,7 @@ import ru.tinkoff.edu.java.scrapper.exceptions.ResourceNotFoundException;
 public class TgChatsController {
     @PostMapping("/{id}")
     public TgChatResponse addChat(@PathVariable("id") @Min(0) long tgChatId) {
+        throwIfChatNotFound(tgChatId);
         return new TgChatResponse();
     }
 

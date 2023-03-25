@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.server.ResponseStatusException;
 import ru.tinkoff.edu.java.scrapper.dto.ApiErrorResponse;
 import ru.tinkoff.edu.java.scrapper.exceptions.ResourceNotFoundException;
@@ -41,6 +42,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = ConstraintViolationException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ApiErrorResponse handleInvalidPathVariables(ConstraintViolationException exception, WebRequest request) {
+        return createApiErrorResponse(exception, request, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ApiErrorResponse handleArgumentTypeMismatch(MethodArgumentTypeMismatchException exception, WebRequest request) {
         return createApiErrorResponse(exception, request, HttpStatus.BAD_REQUEST);
     }
 
