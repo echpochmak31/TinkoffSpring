@@ -16,7 +16,7 @@ import java.util.Map;
         "score",
         "content_license",
 })
-public record StackOverflowItems(
+public record StackOverflowApiItems(
         @JsonProperty("tags") String[] tags,
         @JsonProperty("last_activity_date") OffsetDateTime lastActivityDate,
 
