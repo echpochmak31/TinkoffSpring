@@ -1,18 +1,18 @@
 package ru.tinkoff.edu.java.scrapper.webclients;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
-public class StackOverflowWebClientConfig {
-
-    @Value("https://api.stackexchange.com/2.2")
+public class GitHubWebClientConfig {
+    @Value("https://api.github.com")
     private String url;
 
-    @Bean(name = "stackOverflowWebClient")
-    public WebClient stackOverflowWebClient() {
+    @Bean(name = "gitHubWebClient")
+    public WebClient gitHubWebClient() {
         return WebClient.create(url);
     }
 }

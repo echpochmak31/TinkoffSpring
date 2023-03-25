@@ -6,5 +6,5 @@ import com.fasterxml.jackson.annotation.*;
         "has_more",
         "quota_max",
         "quota_remaining"})
-public record StackOverflowResponse(@JsonProperty("items") StackOverflowItems[] items) {
+public record StackOverflowApiResponse(@JsonProperty("items") StackOverflowItems[] items) {
 }

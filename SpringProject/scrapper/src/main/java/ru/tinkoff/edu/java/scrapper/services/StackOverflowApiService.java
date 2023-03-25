@@ -2,16 +2,24 @@ package ru.tinkoff.edu.java.scrapper.services;
 
 
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import ru.tinkoff.edu.java.scrapper.webclients.dto.StackOverflowResponse;
+import ru.tinkoff.edu.java.scrapper.webclients.dto.StackOverflowApiResponse;
+
+import java.beans.ConstructorProperties;
 
 @Service
-@AllArgsConstructor
-public class StackOverflowService {
+public class StackOverflowApiService {
+
+    public StackOverflowApiService(@Qualifier("stackOverflowWebClient") WebClient webClient){
+        this.webClient = webClient;
+    }
+
     private final WebClient webClient;
 
-    public StackOverflowResponse getQuestion(Long questionId) {
+    public StackOverflowApiResponse getQuestion(Long questionId) {
 
         return webClient
                 .get()
@@ -21,7 +29,7 @@ public class StackOverflowService {
                         questionId.toString(),
                         "?order=desc&sort=activity&site=stackoverflow"))
                 .retrieve()
-                .bodyToMono(StackOverflowResponse.class)
+                .bodyToMono(StackOverflowApiResponse.class)
                 .block();
     }
 

@@ -6,17 +6,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.tinkoff.edu.java.scrapper.services.StackOverflowService;
-import ru.tinkoff.edu.java.scrapper.webclients.dto.StackOverflowResponse;
+import ru.tinkoff.edu.java.scrapper.services.StackOverflowApiService;
+import ru.tinkoff.edu.java.scrapper.webclients.dto.StackOverflowApiResponse;
 
 @RestController
-@RequestMapping("/stackoverflow/api")
+@RequestMapping("/api/stackoverflow")
 public class StackOverflowApiController {
 
     @Autowired
-    private StackOverflowService stackOverflowService;
+    private StackOverflowApiService stackOverflowService;
     @GetMapping("/questions/{id}")
-    public StackOverflowResponse getQuestion(@PathVariable("id") @Min(0) long questionId) {
+    public StackOverflowApiResponse getQuestion(@PathVariable("id") @Min(0) long questionId) {
         return stackOverflowService.getQuestion(questionId);
     }
 }
