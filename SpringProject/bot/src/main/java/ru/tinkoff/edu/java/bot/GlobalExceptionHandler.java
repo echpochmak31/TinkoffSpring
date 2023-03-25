@@ -17,22 +17,13 @@ import java.util.Objects;
 @Component
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
-    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    @ExceptionHandler({
+            HttpMessageNotReadableException.class,
+            MethodArgumentTypeMismatchException.class,
+            MethodArgumentNotValidException.class
+    })
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ApiErrorResponse handleInvalidArgsRequest(MethodArgumentNotValidException exception, WebRequest request) {
-        return createApiErrorResponse(exception, request, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(value = HttpMessageNotReadableException.class)
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ApiErrorResponse handleBadRequest(HttpMessageNotReadableException exception, WebRequest request) {
-        return createApiErrorResponse(exception, request, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ApiErrorResponse handleArgumentTypeMismatch(MethodArgumentTypeMismatchException exception, WebRequest request) {
+    public ApiErrorResponse handleBadRequest(Exception exception, WebRequest request) {
         return createApiErrorResponse(exception, request, HttpStatus.BAD_REQUEST);
     }
 
