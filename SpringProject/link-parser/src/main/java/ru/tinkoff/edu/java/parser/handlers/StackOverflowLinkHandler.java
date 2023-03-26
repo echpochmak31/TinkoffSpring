@@ -8,11 +8,13 @@ import ru.tinkoff.edu.java.parser.results.StackOverflowParseResult;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class StackOverflowLinkHandler implements LinkHandler {
-    private final String hostName = "stackoverflow.com";
+    private static final String hostName = "stackoverflow.com";
+    private static final Pattern regex = Pattern.compile("\\d+(?<=[^d])(?=/)");
     private LinkHandler next;
 
     public StackOverflowLinkHandler() {
@@ -29,10 +31,7 @@ public class StackOverflowLinkHandler implements LinkHandler {
         if (matches(link))
             return new StackOverflowParseResult(link, parseQuestionId(link));
 
-        if (next != null)
-            return next.handle(link);
-
-        return null;
+        return Optional.of(next).map(x -> next.handle(link)).orElse(null);
     }
 
     private boolean matches(String link) {
@@ -45,7 +44,6 @@ public class StackOverflowLinkHandler implements LinkHandler {
     }
 
     private int parseQuestionId(String link) {
-        Pattern regex = Pattern.compile("\\d+(?<=[^d])(?=/)");
         Matcher regexMatcher = regex.matcher(link);
 
         if (regexMatcher.find()) {
