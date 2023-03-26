@@ -13,8 +13,12 @@ import ru.tinkoff.edu.java.scrapper.webclients.dto.StackOverflowApiResponse;
 @RequestMapping("/api/stackoverflow")
 public class StackOverflowApiController {
 
-    @Autowired
-    private StackOverflowApiService stackOverflowService;
+    private final StackOverflowApiService stackOverflowService;
+
+    public StackOverflowApiController(StackOverflowApiService stackOverflowService) {
+        this.stackOverflowService = stackOverflowService;
+    }
+
     @GetMapping("/questions/{id}")
     public StackOverflowApiResponse getQuestion(@PathVariable("id") @Min(0) long questionId) {
         return stackOverflowService.getQuestion(questionId);

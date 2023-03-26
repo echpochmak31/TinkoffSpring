@@ -1,5 +1,6 @@
 app:
   test: testKey
+
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
