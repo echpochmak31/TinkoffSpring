@@ -19,11 +19,10 @@ public class Main {
         linkValidator.setNext(gitHubHandler);
         gitHubHandler.setNext(stackOverflowHandler);
 
-        var linkParser = new DefaultLinkParser(linkValidator);
 
-        var result1 = linkParser.parseLink(link1);
-        var result2 = linkParser.parseLink(link2);
-        var result3 = linkParser.parseLink(link3);
+        var result1 = linkValidator.handle(link1);
+        var result2 = linkValidator.handle(link2);
+        var result3 = linkValidator.handle(link3);
 
         if (result1 instanceof GitHubParseResult gitHubParseResult)
             System.out.println(gitHubParseResult);
