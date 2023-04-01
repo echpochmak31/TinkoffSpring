@@ -2,16 +2,23 @@ package ru.tinkoff.edu.java.bot.service.replies;
 
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.tinkoff.edu.java.bot.service.links.LinksRepository;
 
 import java.util.List;
 
 @Component("defaultUserReplyProcessor")
 public class DefaultUserReplyProcessor implements UserReplyProcessor {
-    private final List<? extends Reply> replies = List.of(
-            new TrackCommandReply(),
-            new UntrackCommandReply()
-    );
+    private final List<? extends Reply> replies;
+
+    public DefaultUserReplyProcessor(@Autowired LinksRepository linksRepository) {
+        replies = List.of(
+                new TrackCommandReply(linksRepository),
+                new UntrackCommandReply(linksRepository)
+        );
+    }
+
 
     @Override
     public List<? extends Reply> replies() {

@@ -17,6 +17,6 @@ public class TrackCommand implements Command {
 
     @Override
     public SendMessage handle(Update update) {
-        return new SendMessage(update.message().chat().id(), "track").replyMarkup(new ForceReply());
+        return new SendMessage(update.message().chat().id(), "Какую ссылку будем отслеживать?").replyMarkup(new ForceReply());
     }
 }
