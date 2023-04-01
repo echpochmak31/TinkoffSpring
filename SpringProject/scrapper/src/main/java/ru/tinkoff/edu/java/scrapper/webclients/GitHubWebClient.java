@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.reactive.function.client.WebClient;
 import ru.tinkoff.edu.java.scrapper.webclients.dto.GitHubApiResponse;
+import ru.tinkoff.edu.java.scrapper.webclients.dto.StackOverflowApiResponse;
 
 @RequiredArgsConstructor
 public class GitHubWebClient {
@@ -22,12 +23,10 @@ public class GitHubWebClient {
     public GitHubApiResponse getRepository(@NonNull String owner, @NonNull String repo) {
         return webClient
                 .get()
-                .uri(String.join(
-                        "",
-                        "/repos/",
-                        owner,
-                        "/",
-                        repo))
+                .uri(uriBuilder -> uriBuilder
+                        .path("/repos/{owner}/repo")
+                        .build(owner, repo)
+                )
                 .retrieve()
                 .bodyToMono(GitHubApiResponse.class)
                 .block();

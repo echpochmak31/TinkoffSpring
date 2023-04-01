@@ -24,11 +24,10 @@ public class StackOverflowWebClient {
     public StackOverflowApiResponse getQuestion(@NonNull @Min(0) Long questionId) {
         return webClient
                 .get()
-                .uri(String.join(
-                        "",
-                        "https://api.stackexchange.com/2.3/questions/",
-                        questionId.toString(),
-                        "?order=desc&sort=activity&site=stackoverflow"))
+                .uri(uriBuilder -> uriBuilder
+                        .path("/questions/{questionId}")
+                        .build(questionId)
+                )
                 .retrieve()
                 .bodyToMono(StackOverflowApiResponse.class)
                 .block();
