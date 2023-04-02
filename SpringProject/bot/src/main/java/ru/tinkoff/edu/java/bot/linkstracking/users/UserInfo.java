@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.bot.service.users;
+package ru.tinkoff.edu.java.bot.linkstracking.users;
 
 import lombok.NonNull;
 

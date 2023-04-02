@@ -1,11 +1,9 @@
-package ru.tinkoff.edu.java.bot.service.links;
+package ru.tinkoff.edu.java.bot.linkstracking.links;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.stereotype.Component;
-import ru.tinkoff.edu.java.bot.service.links.LinksTracker;
-import ru.tinkoff.edu.java.bot.service.links.LinksUntracker;
 
 import java.util.List;
 import java.util.function.Supplier;

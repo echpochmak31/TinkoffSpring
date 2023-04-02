@@ -1,14 +1,9 @@
-package ru.tinkoff.edu.java.bot.service.commands;
+package ru.tinkoff.edu.java.bot.linkstracking.commands;
 
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.SendMessage;
-import lombok.AllArgsConstructor;
 import lombok.NonNull;
-import org.springframework.beans.factory.annotation.Value;
-
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class HelpCommand implements Command {
     private final String markdownMessage;

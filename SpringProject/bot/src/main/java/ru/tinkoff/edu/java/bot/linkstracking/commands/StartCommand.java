@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.bot.service.commands;
+package ru.tinkoff.edu.java.bot.linkstracking.commands;
 
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;

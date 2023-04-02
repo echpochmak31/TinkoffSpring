@@ -1,12 +1,12 @@
-package ru.tinkoff.edu.java.bot.service.commands;
+package ru.tinkoff.edu.java.bot.linkstracking.commands;
 
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import ru.tinkoff.edu.java.bot.service.users.UserRepository;
-import ru.tinkoff.edu.java.bot.service.links.LinksRepository;
+import ru.tinkoff.edu.java.bot.linkstracking.users.UserRepository;
+import ru.tinkoff.edu.java.bot.linkstracking.links.LinksRepository;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;

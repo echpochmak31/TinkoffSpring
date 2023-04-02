@@ -1,18 +1,18 @@
-package ru.tinkoff.edu.java.bot.service.replies;
+package ru.tinkoff.edu.java.bot.linkstracking.replies;
 
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import lombok.AllArgsConstructor;
 import org.apache.commons.validator.routines.UrlValidator;
-import ru.tinkoff.edu.java.bot.service.links.LinksUntracker;
+import ru.tinkoff.edu.java.bot.linkstracking.links.LinksTracker;
 
 @AllArgsConstructor
-public class UntrackCommandReply implements Reply {
+public class TrackCommandReply implements Reply {
     private static final UrlValidator urlValidator = new UrlValidator();
-    private final LinksUntracker linksUntracker;
+    private final LinksTracker linksTracker;
     @Override
     public String reply() {
-        return "Какую ссылку перестанем отслеживать?";
+        return "Какую ссылку будем отслеживать?";
     }
 
     @Override
@@ -20,7 +20,7 @@ public class UntrackCommandReply implements Reply {
         if (!urlValidator.isValid(update.message().text()))
             return new SendMessage(update.message().chat().id(), "Не корректная ссылка");
 
-        linksUntracker.untrack(update.message().text());
-        return new SendMessage(update.message().chat().id(), "Отслеживание ссылки прекращено");
+        linksTracker.track(update.message().text());
+        return new SendMessage(update.message().chat().id(), "Отслеживание ссылки начато");
     }
 }

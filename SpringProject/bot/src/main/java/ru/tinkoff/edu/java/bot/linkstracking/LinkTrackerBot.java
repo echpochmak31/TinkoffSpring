@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.bot.service;
+package ru.tinkoff.edu.java.bot.linkstracking;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
@@ -7,19 +7,16 @@ import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.botcommandscope.BotCommandScopeDefault;
 import com.pengrad.telegrambot.request.BaseRequest;
-import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SetMyCommands;
 import com.pengrad.telegrambot.response.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.tinkoff.edu.java.bot.service.commands.UserMessageProcessor;
-import ru.tinkoff.edu.java.bot.service.replies.UserReplyProcessor;
+import ru.tinkoff.edu.java.bot.linkstracking.commands.UserMessageProcessor;
+import ru.tinkoff.edu.java.bot.linkstracking.replies.UserReplyProcessor;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class LinkTrackerBot implements Bot {
