@@ -7,8 +7,10 @@ import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.botcommandscope.BotCommandScopeDefault;
 import com.pengrad.telegrambot.request.BaseRequest;
+import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SetMyCommands;
 import com.pengrad.telegrambot.response.BaseResponse;
+import com.pengrad.telegrambot.response.SendResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,7 +51,7 @@ public class LinkTrackerBot implements Bot {
     public int process(List<Update> updates) {
 
         for (var update : updates) {
-            var request = isReply(update) ? userReplyProcessor.process(update) : userMessageProcessor.process(update);
+            SendMessage request = isReply(update) ? userReplyProcessor.process(update) : userMessageProcessor.process(update);
             execute(request);
         }
 

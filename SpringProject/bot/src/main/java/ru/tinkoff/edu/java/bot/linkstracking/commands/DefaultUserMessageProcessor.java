@@ -18,7 +18,7 @@ public class DefaultUserMessageProcessor implements UserMessageProcessor {
     public DefaultUserMessageProcessor(
             @Autowired LinksRepository linksRepository,
             @Autowired UserRepository userRepository,
-            @Value("${util.commands.help-md-path}") String pathToMarkdownFile
+            @Value("${util.paths.help-command-md}") String pathToMarkdownFile
     ) {
 
         String markdownMessage;
