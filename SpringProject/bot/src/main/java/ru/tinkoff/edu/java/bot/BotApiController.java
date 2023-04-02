@@ -14,8 +14,10 @@ import ru.tinkoff.edu.java.bot.services.ScrapperApiService;
 @RestController
 @RequestMapping("/updates")
 public class BotApiController {
+
     @PostMapping
     public LinkUpdateResponse createUpdate(@Valid @RequestBody LinkUpdateRequest request) {
         return new LinkUpdateResponse();
     }
+
 }
