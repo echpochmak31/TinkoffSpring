@@ -61,6 +61,7 @@ public class LinkParserTests {
             "github.com/mplushnikov"
     })
     public void invalidLinksTest(String link) {
+
         ParseResult result = linkValidator.handle(link);
 
         Assertions.assertAll(

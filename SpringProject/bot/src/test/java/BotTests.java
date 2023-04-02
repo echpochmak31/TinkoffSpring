@@ -8,7 +8,10 @@ import com.pengrad.telegrambot.response.SendResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -18,22 +21,19 @@ import ru.tinkoff.edu.java.bot.linkstracking.links.LinksRepository;
 import ru.tinkoff.edu.java.bot.linkstracking.replies.DefaultUserReplyProcessor;
 import ru.tinkoff.edu.java.bot.linkstracking.users.UserRepository;
 
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 public class BotTests {
     List<Update> updates;
     Update fakeUpdate;
 
-    @Value("${util.paths.help-command-md}")
+    @Value("${meta.paths.help-command-md}")
     String path;
     LinksRepository linksRepository;
     LinkTrackerBot linkTrackerBot;
@@ -73,7 +73,6 @@ public class BotTests {
         // given
         fakeUpdate = setupUpdate("/list");
         updates.add(fakeUpdate);
-//        when(linksRepository.get()).thenReturn(List.of());
 
         // when
         linkTrackerBot.process(updates);
