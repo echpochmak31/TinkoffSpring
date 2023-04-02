@@ -2,10 +2,13 @@ package ru.tinkoff.edu.java.bot.service;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
+import com.pengrad.telegrambot.model.BotCommand;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.model.botcommandscope.BotCommandScopeDefault;
 import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.request.SendMessage;
+import com.pengrad.telegrambot.request.SetMyCommands;
 import com.pengrad.telegrambot.response.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,7 +17,9 @@ import org.springframework.stereotype.Service;
 import ru.tinkoff.edu.java.bot.service.commands.UserMessageProcessor;
 import ru.tinkoff.edu.java.bot.service.replies.UserReplyProcessor;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LinkTrackerBot implements Bot {
@@ -40,6 +45,7 @@ public class LinkTrackerBot implements Bot {
     @Override
     public void start() {
         bot.setUpdatesListener(this);
+        setMyCommandsMenu();
     }
 
     @Override
@@ -61,6 +67,19 @@ public class LinkTrackerBot implements Bot {
     private boolean isReply(Update update) {
         Message reply = update.message().replyToMessage();
         return reply != null;
+    }
+
+    private void setMyCommandsMenu() {
+        BotCommand[] commands = userMessageProcessor.commands()
+                .stream()
+                .map(x -> new BotCommand(x.command(), x.description()))
+                .toArray(BotCommand[]::new);
+
+        SetMyCommands cmds = new SetMyCommands(commands);
+        cmds.languageCode("ru");
+        cmds.scope(new BotCommandScopeDefault());
+
+        bot.execute(cmds);
     }
 
 }

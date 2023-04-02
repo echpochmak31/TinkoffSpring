@@ -12,7 +12,10 @@ public interface Command {
     SendMessage handle(Update update);
 
     default boolean supports(Update update) {
-        return update.message().text().startsWith(command());
+        return update != null &&
+                update.message() != null &&
+                update.message().text() != null &&
+                update.message().text().startsWith(command());
     }
 
     default BotCommand toApiCommand() {
