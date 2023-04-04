@@ -31,6 +31,9 @@ public class GitHubLinkHandler implements LinkHandler {
         if (matches(link))
             return new GitHubParseResult(link, parseUserRepoPair(link));
 
+        if (next == null)
+            return null;
+
         return Optional.of(next).map(x -> next.handle(link)).orElse(null);
     }
 

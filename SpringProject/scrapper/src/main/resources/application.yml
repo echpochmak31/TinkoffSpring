@@ -1,8 +1,0 @@
-app:
-  test: testKey
-  scheduler:
-    interval: 10000
-
-springdoc:
-  swagger-ui:
-    path: /swagger-ui.html

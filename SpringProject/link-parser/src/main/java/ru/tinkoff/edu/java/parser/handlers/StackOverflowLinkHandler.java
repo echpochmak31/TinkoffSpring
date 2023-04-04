@@ -31,6 +31,9 @@ public class StackOverflowLinkHandler implements LinkHandler {
         if (matches(link))
             return new StackOverflowParseResult(link, parseQuestionId(link));
 
+        if (next == null)
+            return null;
+
         return Optional.of(next).map(x -> next.handle(link)).orElse(null);
     }
 
