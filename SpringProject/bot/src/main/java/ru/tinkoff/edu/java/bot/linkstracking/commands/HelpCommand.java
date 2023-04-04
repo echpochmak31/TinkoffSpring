@@ -6,18 +6,20 @@ import com.pengrad.telegrambot.request.SendMessage;
 import lombok.NonNull;
 
 public class HelpCommand implements Command {
+    private static final String helpCommand = "/help";
+    private static final String helpCommandDescription = "вывести окно с командами";
     private final String markdownMessage;
     public HelpCommand(@NonNull String markdownMessage) {
         this.markdownMessage = markdownMessage;
     }
     @Override
     public String command() {
-        return "/help";
+        return helpCommand;
     }
 
     @Override
     public String description() {
-        return "вывести окно с командами";
+        return helpCommandDescription;
     }
 
     @Override

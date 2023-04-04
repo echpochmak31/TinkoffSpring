@@ -10,6 +10,7 @@ import java.util.List;
 
 @Component("defaultUserReplyProcessor")
 public class DefaultUserReplyProcessor implements UserReplyProcessor {
+    private static final String unsupportedReplyMessage = "Не поддерживаемый ответ";
     private final List<? extends Reply> replies;
 
     public DefaultUserReplyProcessor(@Autowired LinksRepository linksRepository) {
@@ -33,6 +34,6 @@ public class DefaultUserReplyProcessor implements UserReplyProcessor {
                 return reply.handle(update);
         }
 
-        return new SendMessage(update.message().chat().id(), "Не поддерживаемый ответ");
+        return new SendMessage(update.message().chat().id(), unsupportedReplyMessage);
     }
 }

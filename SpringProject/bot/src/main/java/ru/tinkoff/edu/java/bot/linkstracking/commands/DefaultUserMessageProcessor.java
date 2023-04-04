@@ -14,7 +14,8 @@ import java.util.List;
 
 @Component("defaultUserMessageProcessor")
 public class DefaultUserMessageProcessor implements UserMessageProcessor {
-
+    private static final String helpCommandUnavailableMessage = "Недоступно";
+    private static final String unsupportedCommandMessage = "Неподдерживаемая команда";
     public DefaultUserMessageProcessor(
             @Autowired LinksRepository linksRepository,
             @Autowired UserRepository userRepository,
@@ -25,7 +26,7 @@ public class DefaultUserMessageProcessor implements UserMessageProcessor {
         try {
             markdownMessage = new String(Files.readAllBytes(Paths.get(pathToMarkdownFile)));
         } catch (Exception e) {
-            markdownMessage = "Недоступно";
+            markdownMessage = helpCommandUnavailableMessage;
         }
 
         commands = List.of(
@@ -50,6 +51,6 @@ public class DefaultUserMessageProcessor implements UserMessageProcessor {
             if (command.supports(update))
                 return command.handle(update);
         }
-        return new SendMessage(update.message().chat().id(), "Неподдерживаемая команда");
+        return new SendMessage(update.message().chat().id(), unsupportedCommandMessage);
     }
 }

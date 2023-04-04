@@ -14,6 +14,8 @@ import ru.tinkoff.edu.java.bot.clients.dto.ScrapperListLinkResponse;
 
 @Component
 public class ScrapperLinksHttpClient {
+    private static final String headerName = "Tg-Chat-Id";
+    private static final String pathToLinks = "/links";
     @Value("${meta.scrapper.baseUrl}")
     private String baseUrl;
     private WebClient webClient;
@@ -27,8 +29,8 @@ public class ScrapperLinksHttpClient {
     public ScrapperListLinkResponse getLinks(@NonNull Long tgChatId) {
         return webClient
                 .get()
-                .uri("/links")
-                .header("Tg-Chat-Id", tgChatId.toString())
+                .uri(pathToLinks)
+                .header(headerName, tgChatId.toString())
                 .retrieve()
                 .bodyToMono(ScrapperListLinkResponse.class)
                 .block();
@@ -37,8 +39,8 @@ public class ScrapperLinksHttpClient {
     public ScrapperLinkResponse addLink(@NonNull Long tgChatId, @NonNull @URL String link) {
         return webClient
                 .post()
-                .uri("/links")
-                .header("Tg-Chat-Id", tgChatId.toString())
+                .uri(pathToLinks)
+                .header(headerName, tgChatId.toString())
                 .body(Mono.just(new ScrapperLinkRequest(link)), ScrapperLinkRequest.class)
                 .retrieve()
                 .bodyToMono(ScrapperLinkResponse.class)
@@ -48,8 +50,8 @@ public class ScrapperLinksHttpClient {
     public ScrapperLinkResponse deleteLink(@NonNull Long tgChatId, @NonNull @URL String link) {
         return webClient
                 .method(HttpMethod.DELETE)
-                .uri("/links")
-                .header("Tg-Chat-Id", tgChatId.toString())
+                .uri(pathToLinks)
+                .header(headerName, tgChatId.toString())
                 .body(Mono.just(new ScrapperLinkRequest(link)), ScrapperLinkRequest.class)
                 .retrieve()
                 .bodyToMono(ScrapperLinkResponse.class)

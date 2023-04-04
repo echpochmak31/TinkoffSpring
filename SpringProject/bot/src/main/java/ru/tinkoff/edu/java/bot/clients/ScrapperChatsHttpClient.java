@@ -10,6 +10,7 @@ import ru.tinkoff.edu.java.bot.clients.dto.ScrapperTgChatResponse;
 
 @Component
 public class ScrapperChatsHttpClient {
+    private static final String pathToTgChatById = "/tg-chat/{id}";
     @Value("${meta.scrapper.baseUrl}")
     private String baseUrl;
     private WebClient webClient;
@@ -24,7 +25,7 @@ public class ScrapperChatsHttpClient {
         return webClient
                 .post()
                 .uri(UriBuilder -> UriBuilder
-                        .path("/tg-chat/{id}")
+                        .path(pathToTgChatById)
                         .build(tgChatId))
                 .retrieve()
                 .bodyToMono(ScrapperTgChatResponse.class)
@@ -35,7 +36,7 @@ public class ScrapperChatsHttpClient {
         return webClient
                 .delete()
                 .uri(UriBuilder -> UriBuilder
-                        .path("/tg-chat/{id}")
+                        .path(pathToTgChatById)
                         .build(tgChatId))
                 .retrieve()
                 .bodyToMono(ScrapperTgChatResponse.class)
