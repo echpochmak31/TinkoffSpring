@@ -34,9 +34,9 @@ abstract class AbstractContainerBaseTest {
 
 public class IntegrationEnvironment extends AbstractContainerBaseTest {
 
-    private boolean tableExists(Connection connection, String tableName) throws SQLException {
+    private boolean tableExists(Connection connection, String schema, String tableName) throws SQLException {
         DatabaseMetaData meta = connection.getMetaData();
-        ResultSet resultSet = meta.getTables(null, null, tableName, new String[] {"TABLE"});
+        ResultSet resultSet = meta.getTables(null, schema, tableName, new String[] {"TABLE"});
 
         return resultSet.next();
     }
@@ -67,9 +67,9 @@ public class IntegrationEnvironment extends AbstractContainerBaseTest {
 
         Assertions.assertAll(
                 () -> Assertions.assertNotNull(url),
-                () -> Assertions.assertTrue(tableExists(connection, "link")),
-                () -> Assertions.assertTrue(tableExists(connection, "chat")),
-                () -> Assertions.assertTrue(tableExists(connection, "link_chat"))
+                () -> Assertions.assertTrue(tableExists(connection, "links", "link")),
+                () -> Assertions.assertTrue(tableExists(connection, "links","chat")),
+                () -> Assertions.assertTrue(tableExists(connection, "links", "link_chat"))
         );
     }
 }
