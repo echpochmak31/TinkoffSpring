@@ -4,7 +4,7 @@
 CREATE SCHEMA links;
 
 CREATE TABLE links.link (
-    link_id BIGINT PRIMARY KEY,
+    link_id BIGSERIAL PRIMARY KEY,
     url VARCHAR NOT NULL
 );
 
