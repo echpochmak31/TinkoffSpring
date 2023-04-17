@@ -38,3 +38,15 @@ CREATE TABLE links.link_chat (
      FOREIGN KEY (chat_id)
          REFERENCES links.chat (chat_id)
 );
+
+--changeset gleb:4
+
+ALTER TABLE links.link
+ADD COLUMN last_update timestamptz,
+ADD COLUMN last_check timestamptz NOT NULL DEFAULT NOW();
+
+--changeset gleb:5
+
+ALTER TABLE links.link
+ALTER COLUMN last_update
+SET DEFAULT make_timestamptz(1970, 01, 01, 0, 0, 0)
