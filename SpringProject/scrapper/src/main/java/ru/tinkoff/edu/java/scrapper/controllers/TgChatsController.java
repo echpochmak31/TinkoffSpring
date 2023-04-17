@@ -19,26 +19,14 @@ public class TgChatsController {
 
     @PostMapping("/{id}")
     public TgChatResponse addChat(@PathVariable("id") @Min(0) long tgChatId) {
-//        chatService.
-        throwIfChatNotFound(tgChatId);
+        chatService.addChat(tgChatId);
         return new TgChatResponse();
     }
 
     @DeleteMapping("/{id}")
     public TgChatResponse deleteChat(@PathVariable("id") @Min(0) long tgChatId) {
-//        try {
-//            chatService.removeChat(tgChatId)
-//        }
+        chatService.removeChat(tgChatId);
         return new TgChatResponse();
-    }
-
-    private boolean chatExists(long tgChatId) {
-        return tgChatId <= 10;
-    }
-
-    private void throwIfChatNotFound(long tgChatId) {
-        if (!chatExists(tgChatId))
-            throw ResourceNotFoundException.chatNotFound(tgChatId);
     }
 
 }
