@@ -14,34 +14,21 @@ import java.util.List;
 public class JdbcTemplateChatRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
-    public TgChatDto add(long tgChatId, long tgUserId) {
+    public TgChatDto add(long tgChatId) {
         var namedParams = new MapSqlParameterSource()
-                .addValue("chat_id", tgChatId)
-                .addValue("user_id", tgUserId);
+                .addValue("chat_id", tgChatId);
 
-        jdbcTemplate.update("INSERT INTO links.chat (chat_id, user_id) values (:chat_id, :user_id)", namedParams);
+        jdbcTemplate.update("INSERT INTO links.chat (chat_id) values (:chat_id)", namedParams);
 
-        return new TgChatDto(tgChatId, tgUserId);
+        return new TgChatDto(tgChatId);
     }
 
     public TgChatDto remove(long tgChatId) {
         var namedParams = new MapSqlParameterSource()
                 .addValue("chat_id", tgChatId);
 
-        var keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update("DELETE FROM links.chat WHERE chat_id = :chat_id RETURNING user_id", namedParams, keyHolder);
-        return new TgChatDto(tgChatId, keyHolder.getKey().longValue());
-    }
-
-    public List<TgChatDto> findAll(long tgChatId) {
-        var namedParams = new MapSqlParameterSource()
-                .addValue("chat_id", tgChatId);
-
-        return jdbcTemplate.query(
-                "SELECT * FROM links.chat WHERE chat_id = :chat_id",
-                namedParams,
-                DataClassRowMapper.newInstance(TgChatDto.class)
-        );
+        jdbcTemplate.update("DELETE FROM links.chat WHERE chat_id = :chat_id", namedParams);
+        return new TgChatDto(tgChatId);
     }
 
     public List<TgChatDto> findAll() {

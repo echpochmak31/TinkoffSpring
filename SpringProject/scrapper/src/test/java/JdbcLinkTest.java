@@ -32,11 +32,10 @@ public class JdbcLinkTest extends IntegrationEnvironment {
     @Rollback
     public void Should_ContainChatAndLink_When_AddChatAndLink() {
 
-        long userId = 123;
         long chatId = 1235553426;
         String link = "https://stackoverflow.com/questions/42609306/";
 
-        chatRepository.add(chatId, userId);
+        chatRepository.add(chatId);
         linkRepository.add(chatId, link);
 
         var chats = chatRepository.findAll();
@@ -54,11 +53,10 @@ public class JdbcLinkTest extends IntegrationEnvironment {
     @Rollback
     public void Should_BeEmpty_When_RemoveChatAndLink() {
 
-        long userId = 123;
         long chatId = 1235553426;
         String link = "https://stackoverflow.com/questions/42609306/";
 
-        chatRepository.add(chatId, userId);
+        chatRepository.add(chatId);
         linkRepository.add(chatId, link);
         linkRepository.remove(chatId, link);
         chatRepository.remove(chatId);

@@ -6,9 +6,6 @@ import lombok.NonNull;
 public record TgChatDto(
         @NonNull
         @Min(0)
-        Long chatId,
-        @NonNull
-        @Min(0)
-        Long userId
+        Long chatId
 ) {
 }
