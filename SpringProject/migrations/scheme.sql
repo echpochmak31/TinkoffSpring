@@ -15,3 +15,7 @@ CREATE TABLE links.link (
     FOREIGN KEY (chat_id)
         REFERENCES links.chat (chat_id)
 );
+
+--changeset gleb:2
+ALTER TABLE links.chat
+DROP COLUMN user_id;
