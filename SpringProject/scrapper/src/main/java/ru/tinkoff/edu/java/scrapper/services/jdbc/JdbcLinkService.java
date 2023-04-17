@@ -29,7 +29,7 @@ public class JdbcLinkService implements LinkService {
     }
 
     @Override
-    public List<Link> findAll(@Min(0) long tgChatId) {
-        return linkRepository.findAll(tgChatId);
+    public List<Link> findAll() {
+        return linkRepository.findAll();
     }
 }

@@ -7,5 +7,5 @@ import java.util.List;
 public interface LinkService {
     Link addLink(long tgChatId, String link);
     Link removeLink(long tgChatId, String link);
-    List<Link> findAll(long tgChatId);
+    List<Link> findAll();
 }

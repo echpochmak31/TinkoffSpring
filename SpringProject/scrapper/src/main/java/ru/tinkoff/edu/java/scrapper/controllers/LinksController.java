@@ -28,13 +28,21 @@ public class LinksController {
             @Validated @RequestBody AddLinkRequest request) {
 
         var link = linkService.addLink(tgChatId, request.link());
-        return modelMapper.map(link, LinkResponse.class);
+        var linkResponse = modelMapper.map(link, LinkResponse.class);
+        linkResponse.setChatId(tgChatId);
+        return linkResponse;
     }
 
     @GetMapping
     public ListLinkResponse getLinks(@RequestHeader("Tg-Chat-Id") long tgChatId) {
-        var list = linkService.findAll(tgChatId);
-        var array = list.stream().map(x -> modelMapper.map(x, LinkResponse.class)).toArray(LinkResponse[]::new);
+        var list = linkService.findAll();
+        var array = list
+                .stream()
+                .map(x -> modelMapper.map(x, LinkResponse.class))
+                .toArray(LinkResponse[]::new);
+
+        Arrays.stream(array).forEach(x -> x.setChatId(tgChatId));
+
         return new ListLinkResponse(array, array.length);
     }
 
@@ -44,6 +52,8 @@ public class LinksController {
             @Validated @RequestBody RemoveLinkRequest request) {
 
         var link = linkService.removeLink(tgChatId, request.link());
-        return modelMapper.map(link, LinkResponse.class);
+        var linkResponse = modelMapper.map(link, LinkResponse.class);
+        linkResponse.setChatId(tgChatId);
+        return linkResponse;
     }
 }

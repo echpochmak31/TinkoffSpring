@@ -39,7 +39,7 @@ public class JdbcLinkTest extends IntegrationEnvironment {
         linkRepository.add(chatId, link);
 
         var chats = chatRepository.findAll();
-        var links = linkRepository.findAll(chatId);
+        var links = linkRepository.findAll();
 
         Assertions.assertAll(
                 () -> Assertions.assertTrue(chats.stream().map(TgChat::getChatId).toList().contains(chatId)),
@@ -62,7 +62,7 @@ public class JdbcLinkTest extends IntegrationEnvironment {
         chatRepository.remove(chatId);
 
         var chats = chatRepository.findAll();
-        var links = linkRepository.findAll(chatId);
+        var links = linkRepository.findAll();
 
         Assertions.assertAll(
                 () -> Assertions.assertTrue(chats.isEmpty()),
