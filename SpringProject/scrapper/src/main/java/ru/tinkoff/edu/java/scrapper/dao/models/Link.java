@@ -12,6 +12,10 @@ import org.hibernate.validator.constraints.URL;
 public class Link {
     @NonNull
     @Min(0)
+    private Long linkId;
+
+    @NonNull
+    @Min(0)
     private Long chatId;
 
     @NonNull

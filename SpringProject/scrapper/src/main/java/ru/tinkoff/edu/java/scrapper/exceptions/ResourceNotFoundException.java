@@ -12,4 +12,8 @@ public class ResourceNotFoundException extends ScrapperException {
     public static ResourceNotFoundException chatNotFound(long tgChatId) {
         return new ResourceNotFoundException("Chat " + tgChatId + " not found.");
     }
+
+    public static ResourceNotFoundException linkNotFound(long tgChatId, String url){
+        return new ResourceNotFoundException("In chat " + tgChatId + "link " + url + " not found.");
+    }
 }
