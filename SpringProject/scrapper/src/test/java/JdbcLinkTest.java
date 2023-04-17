@@ -8,8 +8,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.dao.JdbcTemplateChatRepository;
 import ru.tinkoff.edu.java.scrapper.dao.JdbcTemplateLinkRepository;
-import ru.tinkoff.edu.java.scrapper.dao.LinkDto;
-import ru.tinkoff.edu.java.scrapper.dao.TgChatDto;
+import ru.tinkoff.edu.java.scrapper.dao.models.Link;
+import ru.tinkoff.edu.java.scrapper.dao.models.TgChat;
 
 @SpringBootTest
 @ContextConfiguration(classes = IntegrationEnvironment.IntegrationEnvironmentConfig.class)
@@ -42,8 +42,8 @@ public class JdbcLinkTest extends IntegrationEnvironment {
         var links = linkRepository.findAll(chatId);
 
         Assertions.assertAll(
-                () -> Assertions.assertTrue(chats.stream().map(TgChatDto::chatId).toList().contains(chatId)),
-                () -> Assertions.assertTrue(links.stream().map(LinkDto::url).toList().contains(link))
+                () -> Assertions.assertTrue(chats.stream().map(TgChat::chatId).toList().contains(chatId)),
+                () -> Assertions.assertTrue(links.stream().map(Link::url).toList().contains(link))
         );
 
     }

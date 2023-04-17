@@ -1,11 +1,11 @@
 package ru.tinkoff.edu.java.scrapper.services;
 
-import ru.tinkoff.edu.java.scrapper.dao.TgChatDto;
+import ru.tinkoff.edu.java.scrapper.dao.models.TgChat;
 
 import java.util.List;
 
 public interface ChatService {
-    TgChatDto addChat(long tgChatId);
-    TgChatDto removeChat(long tgChatId);
-    List<TgChatDto> findAll();
+    TgChat addChat(long tgChatId);
+    TgChat removeChat(long tgChatId);
+    List<TgChat> findAll();
 }

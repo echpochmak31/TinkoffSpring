@@ -1,11 +1,11 @@
 package ru.tinkoff.edu.java.scrapper.services;
 
-import ru.tinkoff.edu.java.scrapper.dao.LinkDto;
+import ru.tinkoff.edu.java.scrapper.dao.models.Link;
 
 import java.util.List;
 
 public interface LinkService {
-    LinkDto addLink(long tgChatId, String link);
-    LinkDto removeLink(long tgChatId, String link);
-    List<LinkDto> findAll(long tgChatId);
+    Link addLink(long tgChatId, String link);
+    Link removeLink(long tgChatId, String link);
+    List<Link> findAll(long tgChatId);
 }
