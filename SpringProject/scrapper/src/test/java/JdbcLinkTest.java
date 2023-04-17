@@ -42,8 +42,8 @@ public class JdbcLinkTest extends IntegrationEnvironment {
         var links = linkRepository.findAll(chatId);
 
         Assertions.assertAll(
-                () -> Assertions.assertTrue(chats.stream().map(TgChat::chatId).toList().contains(chatId)),
-                () -> Assertions.assertTrue(links.stream().map(Link::url).toList().contains(link))
+                () -> Assertions.assertTrue(chats.stream().map(TgChat::getChatId).toList().contains(chatId)),
+                () -> Assertions.assertTrue(links.stream().map(Link::getUrl).toList().contains(link))
         );
 
     }
