@@ -7,21 +7,34 @@ import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.FileSystemResourceAccessor;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
+import ru.tinkoff.edu.java.scrapper.dao.JdbcTemplateChatRepository;
+import ru.tinkoff.edu.java.scrapper.dao.JdbcTemplateLinkRepository;
 
+import javax.sql.DataSource;
+import javax.xml.crypto.Data;
 import java.io.File;
 import java.nio.file.Path;
 import java.sql.*;
 
-@Testcontainers
-abstract class AbstractContainerBaseTest {
 
+@Testcontainers
+public abstract class IntegrationEnvironment {
     @Container
     static final PostgreSQLContainer<?> POSTGRE_SQL_CONTAINER;
+
+    static Connection connection;
 
     static {
         POSTGRE_SQL_CONTAINER = new PostgreSQLContainer<>(DockerImageName.parse("postgres:15"))
@@ -30,25 +43,48 @@ abstract class AbstractContainerBaseTest {
         POSTGRE_SQL_CONTAINER.start();
 
     }
-}
 
-public class IntegrationEnvironment extends AbstractContainerBaseTest {
+    @Configuration
+    static class IntegrationEnvironmentConfig {
 
-    private boolean tableExists(Connection connection, String schema, String tableName) throws SQLException {
-        DatabaseMetaData meta = connection.getMetaData();
-        ResultSet resultSet = meta.getTables(null, schema, tableName, new String[] {"TABLE"});
+        @Bean
+        public DataSource dataSource() {
+            return DataSourceBuilder.create()
+                    .url(POSTGRE_SQL_CONTAINER.getJdbcUrl())
+                    .username(POSTGRE_SQL_CONTAINER.getUsername())
+                    .password(POSTGRE_SQL_CONTAINER.getPassword())
+                    .build();
+        }
 
-        return resultSet.next();
+        @Bean
+        public NamedParameterJdbcTemplate jdbcTemplate(DataSource dataSource) {
+            return new NamedParameterJdbcTemplate(dataSource);
+        }
+
+        @Bean
+        public JdbcTemplateLinkRepository jdbcTemplateLinkRepository(NamedParameterJdbcTemplate jdbcTemplate) {
+            return new JdbcTemplateLinkRepository(jdbcTemplate);
+        }
+
+        @Bean
+        public JdbcTemplateChatRepository jdbcTemplateChatRepository(NamedParameterJdbcTemplate jdbcTemplate){
+            return new JdbcTemplateChatRepository(jdbcTemplate);
+        }
+
+        @Bean
+        public DataSourceTransactionManager dataSourceTransactionManager(DataSource dataSource){
+            return new DataSourceTransactionManager(dataSource);
+        }
+
     }
 
-    @Test
-    void Should_CreateTables_When_SetupLiquibase() throws SQLException, LiquibaseException {
-
+    @BeforeAll
+    static void liquibaseSetup() throws SQLException, LiquibaseException {
         String url = POSTGRE_SQL_CONTAINER.getJdbcUrl();
         String user = POSTGRE_SQL_CONTAINER.getUsername();
         String password = POSTGRE_SQL_CONTAINER.getPassword();
 
-        java.sql.Connection connection = DriverManager.getConnection(url, user, password);
+        connection = DriverManager.getConnection(url, user, password);
 
         Database database = DatabaseFactory.getInstance()
                 .findCorrectDatabaseImplementation(new JdbcConnection(connection));
@@ -64,12 +100,5 @@ public class IntegrationEnvironment extends AbstractContainerBaseTest {
         );
 
         liquibase.update(new Contexts(), new LabelExpression());
-
-        Assertions.assertAll(
-                () -> Assertions.assertNotNull(url),
-                () -> Assertions.assertTrue(tableExists(connection, "links", "link")),
-                () -> Assertions.assertTrue(tableExists(connection, "links","chat")),
-                () -> Assertions.assertTrue(tableExists(connection, "links", "link_chat"))
-        );
     }
 }
