@@ -3,18 +3,13 @@ package ru.tinkoff.edu.java.scrapper.scheduling;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jooq.DSLContext;
-import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import ru.tinkoff.edu.java.parser.handlers.GitHubLinkHandler;
 import ru.tinkoff.edu.java.parser.handlers.LinkHandler;
-import ru.tinkoff.edu.java.parser.handlers.LinkValidator;
 import ru.tinkoff.edu.java.parser.handlers.StackOverflowLinkHandler;
-import ru.tinkoff.edu.java.parser.results.GitHubParseResult;
 import ru.tinkoff.edu.java.parser.results.ParseResult;
-import ru.tinkoff.edu.java.parser.results.StackOverflowParseResult;
 import ru.tinkoff.edu.java.scrapper.dao.models.Link;
 import ru.tinkoff.edu.java.scrapper.dao.models.TgChat;
 import ru.tinkoff.edu.java.scrapper.scheduling.apihandlers.ApiHandler;
@@ -25,12 +20,8 @@ import ru.tinkoff.edu.java.scrapper.services.GitHubApiService;
 import ru.tinkoff.edu.java.scrapper.services.LinkService;
 import ru.tinkoff.edu.java.scrapper.services.StackOverflowApiService;
 import ru.tinkoff.edu.java.scrapper.webclients.BotHttpClient;
-import ru.tinkoff.edu.java.scrapper.webclients.GitHubWebClient;
-import ru.tinkoff.edu.java.scrapper.webclients.StackOverflowWebClient;
-import ru.tinkoff.edu.java.scrapper.webclients.dto.StackOverflowApiResponse;
 
 import java.time.Duration;
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 
 @Component
