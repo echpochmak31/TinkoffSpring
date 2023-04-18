@@ -7,11 +7,13 @@ import jakarta.validation.constraints.PastOrPresent;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NonNull;
+import lombok.ToString;
 import org.hibernate.validator.constraints.URL;
 
 import java.time.OffsetDateTime;
 
 @Data
+@ToString
 @AllArgsConstructor
 public class Link {
     @NonNull

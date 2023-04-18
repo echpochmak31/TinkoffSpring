@@ -2,13 +2,12 @@ package ru.tinkoff.edu.java.scrapper.scheduling.apihandlers;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import ru.tinkoff.edu.java.parser.models.UserRepoPair;
 import ru.tinkoff.edu.java.parser.results.GitHubParseResult;
 import ru.tinkoff.edu.java.parser.results.ParseResult;
 import ru.tinkoff.edu.java.scrapper.dao.models.Link;
+import ru.tinkoff.edu.java.scrapper.exceptions.UpdatesReceivingException;
 import ru.tinkoff.edu.java.scrapper.services.GitHubApiService;
-import ru.tinkoff.edu.java.scrapper.services.LinkService;
 import ru.tinkoff.edu.java.scrapper.webclients.dto.github.GitHubApiEventResponse;
 
 import java.time.OffsetDateTime;
@@ -33,7 +32,7 @@ public class GitHubApiHandler implements ApiHandler {
                     .getEvents(userRepoPair.user(), userRepoPair.repository());
 
             if (eventList == null || eventList.length == 0)
-                throw new RuntimeException();
+                throw UpdatesReceivingException.gitHubUpdatesFailure(link);
 
             OffsetDateTime actualLastUpdate = eventList[0].createdAt();
 
