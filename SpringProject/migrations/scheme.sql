@@ -50,3 +50,19 @@ ADD COLUMN last_check timestamptz NOT NULL DEFAULT NOW();
 ALTER TABLE links.link
 ALTER COLUMN last_update
 SET DEFAULT make_timestamptz(1970, 01, 01, 0, 0, 0)
+
+--changeset gleb:6
+
+CREATE TABLE links.stack_overflow_links (
+    link_id BIGINT PRIMARY KEY,
+    comment_amount INT DEFAULT 0,
+    answers_amount INT DEFAULT 0,
+    is_answered BOOL DEFAULT FALSE,
+    FOREIGN KEY (link_id)
+        REFERENCES links.link (link_id)
+);
+
+--changeset gleb:7
+
+ALTER TABLE links.stack_overflow_links
+RENAME TO stackoverflow_link;
