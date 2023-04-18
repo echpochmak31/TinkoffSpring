@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.scrapper.webclients.dto;
+package ru.tinkoff.edu.java.scrapper.webclients.dto.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;

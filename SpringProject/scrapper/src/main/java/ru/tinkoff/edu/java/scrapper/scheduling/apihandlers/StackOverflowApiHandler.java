@@ -13,20 +13,22 @@ public class StackOverflowApiHandler implements ApiHandler {
     private ApiHandler next;
 
     @Override
-    public boolean hasUpdate(@NonNull ParseResult parseResult, @NonNull Link link) {
+    public ApiHandlerResult handle(@NonNull ParseResult parseResult, @NonNull Link link) {
+        var result = new ApiHandlerResult(false, null);
+
         if (parseResult instanceof StackOverflowParseResult stackOverflowParseResult) {
             var response = stackOverflowApiService.getQuestion(stackOverflowParseResult.getQuestionId());
             var actualLastUpdate = response.items()[0].lastEditDate();
             if (actualLastUpdate != null && actualLastUpdate.isBefore(link.getLastUpdate())) {
                 link.setLastUpdate(actualLastUpdate);
-                return true;
+                return new ApiHandlerResult(true, "");
             }
-            return false;
+            return result;
         }
         else if (next == null)
-            return false;
+            return result;
 
-        return next.hasUpdate(parseResult, link);
+        return next.handle(parseResult, link);
     }
 
     @Override

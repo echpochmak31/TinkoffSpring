@@ -13,6 +13,7 @@ import ru.tinkoff.edu.java.parser.results.ParseResult;
 import ru.tinkoff.edu.java.scrapper.dao.models.Link;
 import ru.tinkoff.edu.java.scrapper.dao.models.TgChat;
 import ru.tinkoff.edu.java.scrapper.scheduling.apihandlers.ApiHandler;
+import ru.tinkoff.edu.java.scrapper.scheduling.apihandlers.ApiHandlerResult;
 import ru.tinkoff.edu.java.scrapper.scheduling.apihandlers.GitHubApiHandler;
 import ru.tinkoff.edu.java.scrapper.scheduling.apihandlers.StackOverflowApiHandler;
 import ru.tinkoff.edu.java.scrapper.services.ChatService;
@@ -39,23 +40,24 @@ public class LinkUpdaterScheduler {
     private ApiHandler apiHandler;
     private LinkHandler linkHandler;
 
-    @Value("${meta.duration}")
+    @Value("${meta.updates.check-interval}")
     private Duration duration;
-
-    @Value("${meta.updateDescription}")
-    private String description;
 
     @Scheduled(fixedDelayString = "${app.scheduler.interval}")
     public void update() {
         log.info("Update!");
 
         var links = linkService.findOldest(duration);
+
         var linksWithUpdates = new ArrayList<Link>();
 
         for (var link : links) {
-            ParseResult parseResult = linkHandler.handle(link.getUrl());
+            var parseResult = linkHandler.handle(link.getUrl());
+            var apiHandlerResult = apiHandler.handle(parseResult, link);
 
-            if (apiHandler.hasUpdate(parseResult, link)) {
+            if (apiHandlerResult.hasUpdate()) {
+                log.info(apiHandlerResult.description());
+
                 linksWithUpdates.add(link);
                 var chatIds = chatService
                         .findAllByLinkId(link.getLinkId())
@@ -63,7 +65,7 @@ public class LinkUpdaterScheduler {
                         .map(TgChat::getChatId)
                         .toArray(Long[]::new);
 
-                botHttpClient.update(link.getLinkId(), link.getUrl(), description, chatIds);
+                botHttpClient.update(link.getLinkId(), link.getUrl(), apiHandlerResult.description(), chatIds);
             }
         }
 
