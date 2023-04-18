@@ -24,7 +24,7 @@ public class GitHubWebClient {
         return webClient
                 .get()
                 .uri(uriBuilder -> uriBuilder
-                        .path("/repos/{owner}/repo")
+                        .path("/repos/{owner}/{repo}")
                         .build(owner, repo)
                 )
                 .retrieve()
