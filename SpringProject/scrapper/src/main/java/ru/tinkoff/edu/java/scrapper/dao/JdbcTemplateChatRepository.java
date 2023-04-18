@@ -1,5 +1,6 @@
 package ru.tinkoff.edu.java.scrapper.dao;
 
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -14,7 +15,7 @@ import java.util.List;
 public class JdbcTemplateChatRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
-    public TgChat add(long tgChatId) {
+    public TgChat add(@Min(0) long tgChatId) {
         var namedParams = new MapSqlParameterSource()
                 .addValue("chat_id", tgChatId);
 
@@ -23,7 +24,7 @@ public class JdbcTemplateChatRepository {
         return new TgChat(tgChatId);
     }
 
-    public TgChat remove(long tgChatId) {
+    public TgChat remove(@Min(0) long tgChatId) {
         var namedParams = new MapSqlParameterSource()
                 .addValue("chat_id", tgChatId);
 
@@ -36,5 +37,14 @@ public class JdbcTemplateChatRepository {
                 "SELECT * FROM links.chat",
                 DataClassRowMapper.newInstance(TgChat.class)
         );
+    }
+
+    public List<TgChat> findAllByLinkId(@Min(0) long linkId) {
+        var namedParams = new MapSqlParameterSource()
+                .addValue("link_id", linkId);
+
+        String sql = "SELECT chat_id FROM links.link_chat WHERE link_id = :link_id";
+
+        return jdbcTemplate.query(sql, namedParams, DataClassRowMapper.newInstance(TgChat.class));
     }
 }

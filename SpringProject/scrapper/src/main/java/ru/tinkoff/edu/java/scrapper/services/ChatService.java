@@ -8,4 +8,5 @@ public interface ChatService {
     TgChat addChat(long tgChatId);
     TgChat removeChat(long tgChatId);
     List<TgChat> findAll();
+    List<TgChat> findAllByLinkId(long linkId);
 }

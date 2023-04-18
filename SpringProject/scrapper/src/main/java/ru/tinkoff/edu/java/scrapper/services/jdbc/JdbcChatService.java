@@ -29,4 +29,9 @@ public class JdbcChatService implements ChatService {
     public List<TgChat> findAll() {
         return chatRepository.findAll();
     }
+
+    @Override
+    public List<TgChat> findAllByLinkId(@Min(0) long linkId) {
+        return chatRepository.findAllByLinkId(linkId);
+    }
 }

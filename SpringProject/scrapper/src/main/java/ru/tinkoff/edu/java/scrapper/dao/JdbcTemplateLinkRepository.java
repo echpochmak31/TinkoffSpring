@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import ru.tinkoff.edu.java.scrapper.dao.models.Link;
 import ru.tinkoff.edu.java.scrapper.exceptions.ResourceNotFoundException;
 
+import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -73,6 +74,39 @@ public class JdbcTemplateLinkRepository {
         String sql = "SELECT * FROM links.link";
 
         return jdbcTemplate.query(sql, DataClassRowMapper.newInstance(Link.class));
+    }
+
+    public List<Link> findOldest(@NonNull Duration duration) {
+        String sql = "SELECT * FROM links.link WHERE last_check < NOW() - :seconds * INTERVAL '1 second'";
+
+        var namedParams = new MapSqlParameterSource()
+                .addValue("seconds", duration.getSeconds());
+
+        var result = jdbcTemplate.query(sql, namedParams, DataClassRowMapper.newInstance(Link.class));
+
+        String updateSql = "UPDATE links.link SET last_check = NOW() WHERE link_id = :link_id";
+
+        MapSqlParameterSource[] parameterSources = result
+                .stream()
+                .map(x -> new MapSqlParameterSource().addValue("link_id", x.getLinkId()))
+                .toArray(MapSqlParameterSource[]::new);
+
+        jdbcTemplate.batchUpdate(updateSql, parameterSources);
+
+        return result;
+    }
+
+    public void refreshLastUpdate(@NonNull List<Link> linksWithUpdates) {
+        String sql = "UPDATE links.link SET last_update = :last_update WHERE link_id = :link_id";
+
+        MapSqlParameterSource[] parameterSources = linksWithUpdates
+                .stream()
+                .map(x -> new MapSqlParameterSource()
+                        .addValue("link_id", x.getLinkId())
+                        .addValue("last_update", x.getLastUpdate()))
+                .toArray(MapSqlParameterSource[]::new);
+
+        jdbcTemplate.batchUpdate(sql, parameterSources);
     }
 
 }

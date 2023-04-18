@@ -24,8 +24,8 @@ public class Link {
     private String url;
 
     @PastOrPresent
-    private OffsetDateTime last_update;
+    private OffsetDateTime lastUpdate;
 
     @PastOrPresent
-    private OffsetDateTime last_check;
+    private OffsetDateTime lastCheck;
 }

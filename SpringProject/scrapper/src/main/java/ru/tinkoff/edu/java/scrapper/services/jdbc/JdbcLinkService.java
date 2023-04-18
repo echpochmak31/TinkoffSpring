@@ -10,6 +10,7 @@ import ru.tinkoff.edu.java.scrapper.dao.JdbcTemplateLinkRepository;
 import ru.tinkoff.edu.java.scrapper.dao.models.Link;
 import ru.tinkoff.edu.java.scrapper.services.LinkService;
 
+import java.time.Duration;
 import java.util.List;
 
 @Service
@@ -31,5 +32,15 @@ public class JdbcLinkService implements LinkService {
     @Override
     public List<Link> findAll() {
         return linkRepository.findAll();
+    }
+
+    @Override
+    public List<Link> findOldest(@NonNull Duration duration) {
+        return linkRepository.findOldest(duration);
+    }
+
+    @Override
+    public void refreshLastUpdate(@NonNull List<Link> linksWithUpdates) {
+        linkRepository.refreshLastUpdate(linksWithUpdates);
     }
 }
