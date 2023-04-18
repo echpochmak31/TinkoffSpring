@@ -22,7 +22,7 @@ public class StackOverflowWebClient {
     }
 
     public static StackOverflowWebClient create(@NonNull @URL String baseUrl) {
-        HttpClient httpClient = HttpClient.create().resolver(DefaultAddressResolverGroup.INSTANCE);
+        HttpClient httpClient = HttpClient.create().resolver(DefaultAddressResolverGroup.INSTANCE).compress(true);
 
         WebClient newWebClient = WebClient.builder()
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
