@@ -4,6 +4,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.NonNull;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import ru.tinkoff.edu.java.scrapper.webclients.dto.BotLinkUpdateRequest;
@@ -11,6 +12,7 @@ import ru.tinkoff.edu.java.scrapper.webclients.dto.BotLinkUpdateResponse;
 
 import java.net.URI;
 
+@Component
 public class BotHttpClient {
     private static final String pathToUpdates = "/updates";
     @Value("${meta.bot.baseUrl}")
