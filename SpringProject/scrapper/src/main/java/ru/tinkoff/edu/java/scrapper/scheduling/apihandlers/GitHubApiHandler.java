@@ -2,6 +2,7 @@ package ru.tinkoff.edu.java.scrapper.scheduling.apihandlers;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import ru.tinkoff.edu.java.parser.models.UserRepoPair;
 import ru.tinkoff.edu.java.parser.results.GitHubParseResult;
 import ru.tinkoff.edu.java.parser.results.ParseResult;
@@ -37,6 +38,7 @@ public class GitHubApiHandler implements ApiHandler {
             OffsetDateTime actualLastUpdate = eventList[0].createdAt();
 
             if (actualLastUpdate.isAfter(link.getLastUpdate())) {
+
                 result.toBuilder()
                         .hasUpdate(true)
                         .description(generateDescription(eventList, link.getLastUpdate()))
@@ -61,7 +63,7 @@ public class GitHubApiHandler implements ApiHandler {
     private String generateDescription(GitHubApiEventResponse[] eventList, OffsetDateTime lastUpdate) {
         var stringBuilder = new StringBuilder();
 
-        stringBuilder.append("Есть следующий обновления:\n");
+        stringBuilder.append("Есть обновления!\n");
 
         Arrays.stream(eventList)
                 .filter(x -> x.createdAt().isAfter(lastUpdate))

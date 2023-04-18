@@ -6,11 +6,11 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
-import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
-import ru.tinkoff.edu.java.scrapper.webclients.dto.StackOverflowApiResponse;
+import ru.tinkoff.edu.java.scrapper.webclients.dto.stackoverflow.StackOverflowApiCommentsResponse;
+import ru.tinkoff.edu.java.scrapper.webclients.dto.stackoverflow.StackOverflowApiResponse;
 
 @RequiredArgsConstructor
 public class StackOverflowWebClient {
@@ -46,6 +46,24 @@ public class StackOverflowWebClient {
                 )
                 .retrieve()
                 .bodyToMono(StackOverflowApiResponse.class)
+                .block();
+    }
+
+    public StackOverflowApiCommentsResponse getComments(@NonNull @Min(0) Long questionId) {
+        var multiValueMap = new LinkedMultiValueMap<String, String>();
+        multiValueMap.add("order", "desc");
+        multiValueMap.add("sort", "creation");
+        multiValueMap.add("site", "stackoverflow");
+
+        return webClient
+                .get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/questions/{questionId}/comments")
+                        .queryParams(multiValueMap)
+                        .build(questionId)
+                )
+                .retrieve()
+                .bodyToMono(StackOverflowApiCommentsResponse.class)
                 .block();
     }
 }

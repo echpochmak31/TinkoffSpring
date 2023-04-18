@@ -11,19 +11,16 @@ import ru.tinkoff.edu.java.parser.handlers.LinkHandler;
 import ru.tinkoff.edu.java.parser.handlers.StackOverflowLinkHandler;
 import ru.tinkoff.edu.java.parser.results.ParseResult;
 import ru.tinkoff.edu.java.scrapper.dao.models.Link;
+import ru.tinkoff.edu.java.scrapper.dao.models.StackOverflowLink;
 import ru.tinkoff.edu.java.scrapper.dao.models.TgChat;
-import ru.tinkoff.edu.java.scrapper.scheduling.apihandlers.ApiHandler;
-import ru.tinkoff.edu.java.scrapper.scheduling.apihandlers.ApiHandlerResult;
-import ru.tinkoff.edu.java.scrapper.scheduling.apihandlers.GitHubApiHandler;
-import ru.tinkoff.edu.java.scrapper.scheduling.apihandlers.StackOverflowApiHandler;
-import ru.tinkoff.edu.java.scrapper.services.ChatService;
-import ru.tinkoff.edu.java.scrapper.services.GitHubApiService;
-import ru.tinkoff.edu.java.scrapper.services.LinkService;
-import ru.tinkoff.edu.java.scrapper.services.StackOverflowApiService;
+import ru.tinkoff.edu.java.scrapper.scheduling.apihandlers.*;
+import ru.tinkoff.edu.java.scrapper.services.*;
 import ru.tinkoff.edu.java.scrapper.webclients.BotHttpClient;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 @Component
 @Slf4j
@@ -32,13 +29,15 @@ public class LinkUpdaterScheduler {
 
     private final ChatService chatService;
     private final LinkService linkService;
-
-    private final GitHubApiService gitHubApiService;
+    private final StackOverflowLinkService stackOverflowLinkService;
     private final StackOverflowApiService stackOverflowApiService;
+    private final GitHubApiService gitHubApiService;
 
     private final BotHttpClient botHttpClient;
     private ApiHandler apiHandler;
     private LinkHandler linkHandler;
+
+    private final HashMap<Long, StackOverflowLink> stackOverflowLinkCache;
 
     @Value("${meta.updates.check-interval}")
     private Duration duration;
@@ -47,9 +46,10 @@ public class LinkUpdaterScheduler {
     public void update() {
         log.info("Update!");
 
+        var linksWithUpdates = new ArrayList<Link>();
         var links = linkService.findOldest(duration);
 
-        var linksWithUpdates = new ArrayList<Link>();
+        loadStackOverflowCache(stackOverflowLinkService.getByIds(links.stream().map(Link::getLinkId).toList()));
 
         for (var link : links) {
             var parseResult = linkHandler.handle(link.getUrl());
@@ -69,6 +69,8 @@ public class LinkUpdaterScheduler {
             }
         }
 
+
+        flushStackOverflowCache();
         linkService.refreshLastUpdate(linksWithUpdates);
     }
 
@@ -79,8 +81,21 @@ public class LinkUpdaterScheduler {
         linkHandler.setNext(stackOverflowHandler);
 
         apiHandler = new GitHubApiHandler(gitHubApiService);
-        var stackOverFlowApiHandler = new StackOverflowApiHandler(stackOverflowApiService);
+        var stackOverFlowApiHandler = new StackOverflowApiHandler(stackOverflowApiService, stackOverflowLinkCache);
         apiHandler.setNext(stackOverFlowApiHandler);
+    }
+
+    private void loadStackOverflowCache(List<StackOverflowLink> links) {
+        links.forEach(x -> stackOverflowLinkCache.put(x.getLinkId(), x));
+    }
+
+    private void flushStackOverflowCache() {
+        stackOverflowLinkService.upsertBatch(stackOverflowLinkCache.values().stream().toList());
+        stackOverflowLinkCache.clear();
+    }
+
+    private void handleLink(Link link) {
+
     }
 }
 
