@@ -10,6 +10,7 @@ import ru.tinkoff.edu.java.scrapper.scheduling.Scheduler;
 @ConfigurationProperties(prefix = "app", ignoreUnknownFields = false)
 public record ApplicationConfig(
         @NotNull String test,
-        @NotNull Scheduler scheduler
+        @NotNull Scheduler scheduler,
+        @NotNull AccessType databaseAccessType
 ) {
 }

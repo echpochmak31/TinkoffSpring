@@ -13,7 +13,6 @@ import ru.tinkoff.edu.java.scrapper.services.LinkService;
 import java.time.Duration;
 import java.util.List;
 
-@Service
 @RequiredArgsConstructor
 public class JdbcLinkService implements LinkService {
 
@@ -32,6 +31,11 @@ public class JdbcLinkService implements LinkService {
     @Override
     public List<Link> findAll() {
         return linkRepository.findAll();
+    }
+
+    @Override
+    public List<Link> findAllByChatId(long tgChatId) {
+        return linkRepository.findAllByChatId(tgChatId);
     }
 
     @Override

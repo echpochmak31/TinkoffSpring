@@ -9,7 +9,6 @@ import ru.tinkoff.edu.java.scrapper.services.StackOverflowLinkService;
 
 import java.util.List;
 
-@Service
 @RequiredArgsConstructor
 public class JdbcStackOverflowLinkService implements StackOverflowLinkService {
     private final JdbcTemplateStackOverflowLinkRepository stackOverflowLinkRepository;

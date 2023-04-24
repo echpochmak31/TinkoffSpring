@@ -9,7 +9,6 @@ import ru.tinkoff.edu.java.scrapper.services.ChatService;
 
 import java.util.List;
 
-@Service
 @RequiredArgsConstructor
 public class JdbcChatService implements ChatService {
 
