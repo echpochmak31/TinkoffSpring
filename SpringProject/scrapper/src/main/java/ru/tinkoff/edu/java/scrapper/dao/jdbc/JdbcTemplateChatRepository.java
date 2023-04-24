@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.scrapper.dao;
+package ru.tinkoff.edu.java.scrapper.dao.jdbc;
 
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class JdbcTemplateChatRepository {
 
         jdbcTemplate.update("INSERT INTO links.chat (chat_id) values (:chat_id)", namedParams);
 
-        return new TgChat(tgChatId);
+        return TgChat.builder().chatId(tgChatId).build();
     }
 
     public TgChat remove(@Min(0) long tgChatId) {
@@ -29,7 +29,7 @@ public class JdbcTemplateChatRepository {
                 .addValue("chat_id", tgChatId);
 
         jdbcTemplate.update("DELETE FROM links.chat WHERE chat_id = :chat_id", namedParams);
-        return new TgChat(tgChatId);
+        return TgChat.builder().chatId(tgChatId).build();
     }
 
     public List<TgChat> findAll() {

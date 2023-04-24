@@ -3,7 +3,7 @@ package ru.tinkoff.edu.java.scrapper.services.jdbc;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.tinkoff.edu.java.scrapper.dao.JdbcTemplateChatRepository;
+import ru.tinkoff.edu.java.scrapper.dao.jdbc.JdbcTemplateChatRepository;
 import ru.tinkoff.edu.java.scrapper.dao.models.TgChat;
 import ru.tinkoff.edu.java.scrapper.services.ChatService;
 

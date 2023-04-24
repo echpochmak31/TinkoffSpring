@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.scrapper.dao;
+package ru.tinkoff.edu.java.scrapper.dao.jdbc;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
