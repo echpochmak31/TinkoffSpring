@@ -16,7 +16,7 @@ import org.springframework.validation.annotation.Validated;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "stackoverflow_link")
+@Table(name = "stackoverflow_link", schema = "links")
 public class StackOverflowLink {
     @NonNull
     @Min(0)

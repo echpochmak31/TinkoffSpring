@@ -4,13 +4,14 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "chat")
+@Table(name = "chat", schema = "links")
 public class TgChat {
     @NonNull
     @Min(0)
@@ -23,6 +24,11 @@ public class TgChat {
     }
 
     @Getter
+    @Builder.Default
     @ManyToMany(mappedBy = "tgChats", fetch = FetchType.LAZY)
-    private List<Link> links;
+    private List<Link> links = new ArrayList<>();
+
+    public void removeLink(Link link) {
+        links.remove(link);
+    }
 }
