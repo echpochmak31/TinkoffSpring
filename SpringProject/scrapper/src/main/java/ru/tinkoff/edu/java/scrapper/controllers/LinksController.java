@@ -35,7 +35,7 @@ public class LinksController {
 
     @GetMapping
     public ListLinkResponse getLinks(@RequestHeader("Tg-Chat-Id") long tgChatId) {
-        var list = linkService.findAll();
+        var list = linkService.findAllByChatId(tgChatId);
         var array = list
                 .stream()
                 .map(x -> modelMapper.map(x, LinkResponse.class))
