@@ -66,3 +66,7 @@ CREATE TABLE links.stack_overflow_links (
 
 ALTER TABLE links.stack_overflow_links
 RENAME TO stackoverflow_link;
+
+--changeset gleb:8
+
+ALTER SEQUENCE links.link_link_id_seq INCREMENT 20;
