@@ -49,6 +49,7 @@ public class LinkUpdaterScheduler {
 
         var linksWithUpdates = new ArrayList<Link>();
         var links = linkService.findOldest(duration);
+        linkService.updateOldest(links);
 
         loadStackOverflowCache(stackOverflowLinkService.getByIds(links.stream().map(Link::getLinkId).toList()));
 

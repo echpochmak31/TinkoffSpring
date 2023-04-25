@@ -82,18 +82,18 @@ public class JdbcTemplateLinkRepository {
         var namedParams = new MapSqlParameterSource()
                 .addValue("seconds", duration.getSeconds());
 
-        var result = jdbcTemplate.query(sql, namedParams, DataClassRowMapper.newInstance(Link.class));
+        return jdbcTemplate.query(sql, namedParams, DataClassRowMapper.newInstance(Link.class));
+    }
 
+    public void updateOldest(List<Link> links) {
         String updateSql = "UPDATE links.link SET last_check = NOW() WHERE link_id = :link_id";
 
-        MapSqlParameterSource[] parameterSources = result
+        MapSqlParameterSource[] parameterSources = links
                 .stream()
                 .map(x -> new MapSqlParameterSource().addValue("link_id", x.getLinkId()))
                 .toArray(MapSqlParameterSource[]::new);
 
         jdbcTemplate.batchUpdate(updateSql, parameterSources);
-
-        return result;
     }
 
     public void refreshLastUpdate(@NonNull List<Link> linksWithUpdates) {
