@@ -7,7 +7,7 @@ import lombok.ToString;
 @ToString
 public class StackOverflowParseResult extends ParseResult {
     @Getter
-    private final int questionId;
+    private final long questionId;
     public StackOverflowParseResult(@NonNull String url, int questionId) {
         super(url);
         this.questionId = questionId;
