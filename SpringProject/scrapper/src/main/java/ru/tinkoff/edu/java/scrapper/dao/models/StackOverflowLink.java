@@ -38,7 +38,4 @@ public class StackOverflowLink {
     public StackOverflowLink() {
 
     }
-
-    @OneToOne
-    public Link link;
 }
