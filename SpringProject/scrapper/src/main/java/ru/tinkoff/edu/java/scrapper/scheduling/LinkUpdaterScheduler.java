@@ -3,17 +3,18 @@ package ru.tinkoff.edu.java.scrapper.scheduling;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import ru.tinkoff.edu.java.parser.handlers.GitHubLinkHandler;
 import ru.tinkoff.edu.java.parser.handlers.LinkHandler;
-import ru.tinkoff.edu.java.parser.handlers.StackOverflowLinkHandler;
-import ru.tinkoff.edu.java.parser.results.ParseResult;
 import ru.tinkoff.edu.java.scrapper.dao.models.Link;
 import ru.tinkoff.edu.java.scrapper.dao.models.StackOverflowLink;
 import ru.tinkoff.edu.java.scrapper.dao.models.TgChat;
-import ru.tinkoff.edu.java.scrapper.scheduling.apihandlers.*;
+import ru.tinkoff.edu.java.scrapper.scheduling.apihandlers.ApiHandler;
+import ru.tinkoff.edu.java.scrapper.scheduling.apihandlers.GitHubApiHandler;
+import ru.tinkoff.edu.java.scrapper.scheduling.apihandlers.StackOverflowApiHandler;
 import ru.tinkoff.edu.java.scrapper.services.*;
 import ru.tinkoff.edu.java.scrapper.webclients.BotHttpClient;
 
@@ -34,8 +35,8 @@ public class LinkUpdaterScheduler {
     private final GitHubApiService gitHubApiService;
 
     private final BotHttpClient botHttpClient;
-    private ApiHandler apiHandler;
-    private LinkHandler linkHandler;
+    private final ApiHandler apiHandler;
+    private final LinkHandler linkHandler;
 
     private final HashMap<Long, StackOverflowLink> stackOverflowLinkCache;
 
@@ -48,6 +49,7 @@ public class LinkUpdaterScheduler {
 
         var linksWithUpdates = new ArrayList<Link>();
         var links = linkService.findOldest(duration);
+        linkService.updateOldest(links);
 
         loadStackOverflowCache(stackOverflowLinkService.getByIds(links.stream().map(Link::getLinkId).toList()));
 
@@ -72,17 +74,6 @@ public class LinkUpdaterScheduler {
 
         flushStackOverflowCache();
         linkService.refreshLastUpdate(linksWithUpdates);
-    }
-
-    @PostConstruct
-    private void setHandlers() {
-        linkHandler = new GitHubLinkHandler();
-        var stackOverflowHandler = new StackOverflowLinkHandler();
-        linkHandler.setNext(stackOverflowHandler);
-
-        apiHandler = new GitHubApiHandler(gitHubApiService);
-        var stackOverFlowApiHandler = new StackOverflowApiHandler(stackOverflowApiService, stackOverflowLinkCache);
-        apiHandler.setNext(stackOverFlowApiHandler);
     }
 
     private void loadStackOverflowCache(List<StackOverflowLink> links) {

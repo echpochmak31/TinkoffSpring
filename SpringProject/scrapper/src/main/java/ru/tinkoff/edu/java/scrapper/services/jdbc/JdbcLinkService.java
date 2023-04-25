@@ -44,6 +44,11 @@ public class JdbcLinkService implements LinkService {
     }
 
     @Override
+    public void updateOldest(@NonNull List<Link> links) {
+        linkRepository.updateOldest(links);
+    }
+
+    @Override
     public void refreshLastUpdate(@NonNull List<Link> linksWithUpdates) {
         linkRepository.refreshLastUpdate(linksWithUpdates);
     }

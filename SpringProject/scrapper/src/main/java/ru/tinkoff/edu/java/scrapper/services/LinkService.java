@@ -11,5 +11,6 @@ public interface LinkService {
     List<Link> findAll();
     List<Link> findAllByChatId(long tgChatId);
     List<Link> findOldest(Duration duration);
+    void updateOldest(List<Link> links);
     void refreshLastUpdate(List<Link> linksWithUpdates);
 }
