@@ -15,6 +15,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.dao.jpa.JpaChatRepository;
+import ru.tinkoff.edu.java.scrapper.dao.models.Link;
 import ru.tinkoff.edu.java.scrapper.dao.models.TgChat;
 import ru.tinkoff.edu.java.scrapper.services.jpa.JpaChatService;
 import ru.tinkoff.edu.java.scrapper.services.jpa.JpaLinkService;
@@ -44,27 +45,56 @@ public class JpaLinkTest extends IntegrationEnvironment {
 
     @Autowired
     private JpaChatService chatService;
+    @Autowired
+    private JpaLinkService linkService;
 
 
     @Test
-//    @Transactional
-//    @Rollback
-    public void test() {
+    @Transactional
+    @Rollback
+    public void Should_ContainChatAndLink_When_AddChatAndLink() {
         Assertions.assertAll(
-                () -> Assertions.assertNotNull(jpaChatRepository),
-                () -> Assertions.assertTrue(jpaChatRepository.findAll().isEmpty())
+                () -> Assertions.assertTrue(linkService.findAll().isEmpty()),
+                () -> Assertions.assertTrue(chatService.findAll().isEmpty())
         );
 
-        TgChat chat = chatService.addChat(1234L);
-
-//        TgChat chat = TgChat.builder()
-//                .chatId(1234L)
-//                .build();
-//        jpaChatRepository.save(chat);
+        long chatId = 1234;
+        TgChat chat = chatService.addChat(chatId);
+        Link link = linkService.addLink(chatId, "https://stackoverflow.com/questions/58174319");
 
         Assertions.assertAll(
-                () -> Assertions.assertEquals(1234L, chat.getChatId()),
-                () -> Assertions.assertEquals(1, chatService.findAll().size())
+                () -> Assertions.assertEquals(chatId, chat.getChatId()),
+                () -> Assertions.assertTrue(chatService.findAll().contains(chat)),
+                () -> Assertions.assertTrue(linkService.findAll().contains(link))
         );
     }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void Should_BeEmpty_When_RemoveLink() {
+        Assertions.assertAll(
+                () -> Assertions.assertTrue(linkService.findAll().isEmpty()),
+                () -> Assertions.assertTrue(chatService.findAll().isEmpty())
+        );
+
+        long chatId = 1234;
+        TgChat chat = chatService.addChat(chatId);
+        Link link = linkService.addLink(chatId, "https://stackoverflow.com/questions/58174319");
+
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(chatId, chat.getChatId()),
+                () -> Assertions.assertTrue(chatService.findAll().contains(chat)),
+                () -> Assertions.assertTrue(linkService.findAll().contains(link))
+        );
+
+
+        linkService.removeLink(chatId, link.getUrl());
+
+        Assertions.assertAll(
+                () -> Assertions.assertTrue(linkService.findAll().isEmpty())
+        );
+
+    }
+
 }
