@@ -11,6 +11,7 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.TransactionManager;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -51,12 +52,6 @@ public abstract class IntegrationEnvironment {
                     .password(POSTGRE_SQL_CONTAINER.getPassword())
                     .build();
         }
-
-        @Bean
-        public DataSourceTransactionManager dataSourceTransactionManager(DataSource dataSource){
-            return new DataSourceTransactionManager(dataSource);
-        }
-
     }
 
     @BeforeAll

@@ -5,6 +5,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,10 @@ public class JdbcLinkTest extends IntegrationEnvironment {
 
     @Configuration
     static class JdbcConfig {
+        @Bean
+        public DataSourceTransactionManager dataSourceTransactionManager(DataSource dataSource){
+            return new DataSourceTransactionManager(dataSource);
+        }
         @Bean
         public NamedParameterJdbcTemplate jdbcTemplate(DataSource dataSource) {
             return new NamedParameterJdbcTemplate(dataSource);
