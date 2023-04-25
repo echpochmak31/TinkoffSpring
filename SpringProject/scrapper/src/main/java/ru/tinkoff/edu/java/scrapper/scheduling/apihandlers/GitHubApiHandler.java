@@ -36,7 +36,7 @@ public class GitHubApiHandler implements ApiHandler {
 
             OffsetDateTime actualLastUpdate = eventList[0].createdAt();
 
-            if (actualLastUpdate.isAfter(link.getLastUpdate())) {
+            if (link.getLastUpdate() == null || actualLastUpdate.isAfter(link.getLastUpdate())) {
 
                 result.toBuilder()
                         .hasUpdate(true)
