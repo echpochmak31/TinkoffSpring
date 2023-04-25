@@ -1,9 +1,6 @@
 package ru.tinkoff.edu.java.scrapper.dao.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,4 +38,7 @@ public class StackOverflowLink {
     public StackOverflowLink() {
 
     }
+
+    @OneToOne
+    public Link link;
 }

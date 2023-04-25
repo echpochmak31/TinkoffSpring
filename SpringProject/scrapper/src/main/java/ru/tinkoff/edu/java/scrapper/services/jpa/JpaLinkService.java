@@ -1,9 +1,11 @@
 package ru.tinkoff.edu.java.scrapper.services.jpa;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.dao.jpa.JpaChatRepository;
 import ru.tinkoff.edu.java.scrapper.dao.jpa.JpaLinkRepository;
+import ru.tinkoff.edu.java.scrapper.dao.jpa.JpaStackOverflowLinkRepository;
 import ru.tinkoff.edu.java.scrapper.dao.models.Link;
 import ru.tinkoff.edu.java.scrapper.dao.models.TgChat;
 import ru.tinkoff.edu.java.scrapper.exceptions.ResourceNotFoundException;
@@ -16,11 +18,12 @@ import java.util.Date;
 import java.util.List;
 
 @RequiredArgsConstructor
+@Slf4j
 public class JpaLinkService implements LinkService {
 
-    private OffsetDateTime epoch;
     private final JpaLinkRepository linkRepository;
     private final JpaChatRepository chatRepository;
+    private final JpaStackOverflowLinkRepository stackOverflowLinkRepository;
 
     @Override
     @Transactional
@@ -63,13 +66,14 @@ public class JpaLinkService implements LinkService {
 
         TgChat chat = optionalChat.get();
         Link result = optionalLink.get();
-
         chat.removeLink(result);
+        result.removeChat(chat);
         chatRepository.saveAndFlush(chat);
-
-        if (result.getTgChats().isEmpty())
-            linkRepository.delete(result);
-
+//        linkRepository.saveAndFlush(result);
+        if (result.getTgChats().isEmpty()) {
+            stackOverflowLinkRepository.safeDeleteById(result.getLinkId());
+            linkRepository.deleteById(result.getLinkId());
+        }
         return result;
     }
 

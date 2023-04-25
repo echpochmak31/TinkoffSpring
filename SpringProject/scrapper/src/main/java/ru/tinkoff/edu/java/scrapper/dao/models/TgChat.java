@@ -25,7 +25,7 @@ public class TgChat {
 
     @Getter
     @Builder.Default
-    @ManyToMany(mappedBy = "tgChats", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "tgChats", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Link> links = new ArrayList<>();
 
     public void removeLink(Link link) {

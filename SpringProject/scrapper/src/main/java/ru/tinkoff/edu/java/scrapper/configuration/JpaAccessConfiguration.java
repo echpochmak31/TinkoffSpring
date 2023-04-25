@@ -20,8 +20,12 @@ public class JpaAccessConfiguration {
     }
 
     @Bean
-    public JpaLinkService jpaLinkService(JpaLinkRepository linkRepository, JpaChatRepository chatRepository) {
-        return new JpaLinkService(linkRepository, chatRepository);
+    public JpaLinkService jpaLinkService(
+            JpaLinkRepository linkRepository,
+            JpaChatRepository chatRepository,
+            JpaStackOverflowLinkRepository stackOverflowLinkRepository
+    ) {
+        return new JpaLinkService(linkRepository, chatRepository, stackOverflowLinkRepository);
     }
 
     @Bean

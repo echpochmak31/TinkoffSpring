@@ -66,4 +66,8 @@ public class Link {
         if (!tgChats.contains(tgChat))
             tgChats.add(tgChat);
     }
+
+    public boolean removeChat(@NonNull TgChat tgChat) {
+        return tgChats.remove(tgChat);
+    }
 }
