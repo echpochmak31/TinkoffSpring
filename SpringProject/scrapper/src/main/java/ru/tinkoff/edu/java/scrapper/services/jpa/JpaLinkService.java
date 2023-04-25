@@ -91,15 +91,14 @@ public class JpaLinkService implements LinkService {
     @Override
     @Transactional
     public List<Link> findOldest(Duration duration) {
-        OffsetDateTime offsetDateTime = OffsetDateTime.now();
+        return linkRepository.findAllByLastCheckLessThan(OffsetDateTime.now());
+    }
 
-        List<Link> result = linkRepository.findAllByLastCheckLessThan(offsetDateTime);
-
-        result.forEach(x -> x.setLastCheck(offsetDateTime));
-
-        linkRepository.saveAll(result);
-
-        return result;
+    @Override
+    @Transactional
+    public void updateOldest(List<Link> links) {
+        links.forEach(x -> x.setLastCheck(OffsetDateTime.now()));
+        linkRepository.saveAll(links);
     }
 
     @Override

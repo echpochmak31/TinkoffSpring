@@ -2,6 +2,7 @@ app:
   test: testKey
   scheduler:
     interval: 10000
+  database-access-type: jpa
 
 springdoc:
   swagger-ui:
