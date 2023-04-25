@@ -1,0 +1,41 @@
+app:
+  test: testKey
+  scheduler:
+    interval: 10000
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+server:
+  port: 8082
+
+spring:
+  jpa:
+    properties:
+      hibernate:
+        generate_statistics: false
+        format_sql: true
+        show_sql: false
+        jdbc:
+          batch_size: 50
+          fetch_size: 50
+        order_inserts: true
+        order_updates: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/scrapper
+    username: ${SCRAPPER_POSTGRES_USER}
+    password: ${SCRAPPER_POSTGRES_PASSWORD}
+    driverClassName: org.postgresql.Driver
+
+  liquibase:
+    change-log: migrations/master.xml
+
+meta:
+  updates:
+   check-interval: "PT15S"
+   github-events-per-page: 10
+  bot:
+    baseUrl: "http://localhost:8081"
