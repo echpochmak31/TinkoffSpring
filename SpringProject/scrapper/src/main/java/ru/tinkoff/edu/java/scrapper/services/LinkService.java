@@ -9,6 +9,7 @@ public interface LinkService {
     Link addLink(long tgChatId, String link);
     Link removeLink(long tgChatId, String link);
     List<Link> findAll();
+    List<Link> findAllByChatId(long tgChatId);
     List<Link> findOldest(Duration duration);
     void updateOldest(List<Link> links);
     void refreshLastUpdate(List<Link> linksWithUpdates);

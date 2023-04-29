@@ -6,14 +6,13 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.stereotype.Service;
-import ru.tinkoff.edu.java.scrapper.dao.JdbcTemplateLinkRepository;
+import ru.tinkoff.edu.java.scrapper.dao.jdbc.JdbcTemplateLinkRepository;
 import ru.tinkoff.edu.java.scrapper.dao.models.Link;
 import ru.tinkoff.edu.java.scrapper.services.LinkService;
 
 import java.time.Duration;
 import java.util.List;
 
-@Service
 @RequiredArgsConstructor
 public class JdbcLinkService implements LinkService {
 
@@ -32,6 +31,11 @@ public class JdbcLinkService implements LinkService {
     @Override
     public List<Link> findAll() {
         return linkRepository.findAll();
+    }
+
+    @Override
+    public List<Link> findAllByChatId(long tgChatId) {
+        return linkRepository.findAllByChatId(tgChatId);
     }
 
     @Override

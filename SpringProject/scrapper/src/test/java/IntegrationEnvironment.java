@@ -6,27 +6,23 @@ import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.FileSystemResourceAccessor;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.TransactionManager;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
-import ru.tinkoff.edu.java.scrapper.dao.JdbcTemplateChatRepository;
-import ru.tinkoff.edu.java.scrapper.dao.JdbcTemplateLinkRepository;
 
 import javax.sql.DataSource;
-import javax.xml.crypto.Data;
 import java.io.File;
 import java.nio.file.Path;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 
 @Testcontainers
@@ -38,7 +34,8 @@ public abstract class IntegrationEnvironment {
 
     static {
         POSTGRE_SQL_CONTAINER = new PostgreSQLContainer<>(DockerImageName.parse("postgres:15"))
-                .withDatabaseName("scrapper");
+                .withDatabaseName("scrapper")
+                .withExposedPorts(5432, 5433);
 
         POSTGRE_SQL_CONTAINER.start();
 
@@ -55,27 +52,6 @@ public abstract class IntegrationEnvironment {
                     .password(POSTGRE_SQL_CONTAINER.getPassword())
                     .build();
         }
-
-        @Bean
-        public NamedParameterJdbcTemplate jdbcTemplate(DataSource dataSource) {
-            return new NamedParameterJdbcTemplate(dataSource);
-        }
-
-        @Bean
-        public JdbcTemplateLinkRepository jdbcTemplateLinkRepository(NamedParameterJdbcTemplate jdbcTemplate) {
-            return new JdbcTemplateLinkRepository(jdbcTemplate);
-        }
-
-        @Bean
-        public JdbcTemplateChatRepository jdbcTemplateChatRepository(NamedParameterJdbcTemplate jdbcTemplate){
-            return new JdbcTemplateChatRepository(jdbcTemplate);
-        }
-
-        @Bean
-        public DataSourceTransactionManager dataSourceTransactionManager(DataSource dataSource){
-            return new DataSourceTransactionManager(dataSource);
-        }
-
     }
 
     @BeforeAll

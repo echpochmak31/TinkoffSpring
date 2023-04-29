@@ -28,7 +28,7 @@ public class StackOverflowApiHandler implements ApiHandler {
 
             var actualLastUpdate = question.lastActivityDate();
 
-            if (actualLastUpdate.isAfter(link.getLastUpdate())) {
+            if (link.getLastUpdate() == null || actualLastUpdate.isAfter(link.getLastUpdate())) {
                 var commentsResponse = stackOverflowApiService.getComments(stackOverflowParseResult.getQuestionId());
 
                 var description = new StringBuilder();

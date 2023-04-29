@@ -2,19 +2,49 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import ru.tinkoff.edu.java.scrapper.dao.JdbcTemplateChatRepository;
-import ru.tinkoff.edu.java.scrapper.dao.JdbcTemplateLinkRepository;
+import ru.tinkoff.edu.java.scrapper.dao.jdbc.JdbcTemplateChatRepository;
+import ru.tinkoff.edu.java.scrapper.dao.jdbc.JdbcTemplateLinkRepository;
 import ru.tinkoff.edu.java.scrapper.dao.models.Link;
 import ru.tinkoff.edu.java.scrapper.dao.models.TgChat;
 
+import javax.sql.DataSource;
+
 @SpringBootTest
-@ContextConfiguration(classes = IntegrationEnvironment.IntegrationEnvironmentConfig.class)
+@ContextConfiguration(classes = {
+        IntegrationEnvironment.IntegrationEnvironmentConfig.class,
+        JdbcLinkTest.JdbcConfig.class
+})
 @Transactional("dataSourceTransactionManager")
 public class JdbcLinkTest extends IntegrationEnvironment {
+
+    @Configuration
+    static class JdbcConfig {
+        @Bean
+        public DataSourceTransactionManager dataSourceTransactionManager(DataSource dataSource){
+            return new DataSourceTransactionManager(dataSource);
+        }
+        @Bean
+        public NamedParameterJdbcTemplate jdbcTemplate(DataSource dataSource) {
+            return new NamedParameterJdbcTemplate(dataSource);
+        }
+
+        @Bean
+        public JdbcTemplateLinkRepository jdbcTemplateLinkRepository(NamedParameterJdbcTemplate jdbcTemplate) {
+            return new JdbcTemplateLinkRepository(jdbcTemplate);
+        }
+
+        @Bean
+        public JdbcTemplateChatRepository jdbcTemplateChatRepository(NamedParameterJdbcTemplate jdbcTemplate){
+            return new JdbcTemplateChatRepository(jdbcTemplate);
+        }
+    }
 
 
     @Autowired

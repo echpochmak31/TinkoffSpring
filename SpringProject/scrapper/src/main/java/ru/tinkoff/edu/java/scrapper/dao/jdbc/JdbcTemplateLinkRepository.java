@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.scrapper.dao;
+package ru.tinkoff.edu.java.scrapper.dao.jdbc;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -74,6 +74,16 @@ public class JdbcTemplateLinkRepository {
         String sql = "SELECT * FROM links.link";
 
         return jdbcTemplate.query(sql, DataClassRowMapper.newInstance(Link.class));
+    }
+
+    public List<Link> findAllByChatId(@Min(0) long tgChatId) {
+        var namedParams = new MapSqlParameterSource()
+                .addValue("chat_id", tgChatId);
+
+        String sql = "SELECT * FROM links.link WHERE link_id IN " +
+                "(SELECT link_id FROM links.link_chat lc WHERE lc.chat_id = :chat_id)";
+
+        return jdbcTemplate.query(sql, namedParams, DataClassRowMapper.newInstance(Link.class));
     }
 
     public List<Link> findOldest(@NonNull Duration duration) {
