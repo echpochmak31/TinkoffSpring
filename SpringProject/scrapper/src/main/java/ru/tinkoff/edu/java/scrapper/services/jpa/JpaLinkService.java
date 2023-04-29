@@ -2,6 +2,7 @@ package ru.tinkoff.edu.java.scrapper.services.jpa;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.dao.jpa.JpaChatRepository;
 import ru.tinkoff.edu.java.scrapper.dao.jpa.JpaLinkRepository;
@@ -70,7 +71,7 @@ public class JpaLinkService implements LinkService {
         result.removeChat(chat);
         chatRepository.saveAndFlush(chat);
         if (result.getTgChats().isEmpty()) {
-            stackOverflowLinkRepository.safeDeleteById(result.getLinkId());
+            stackOverflowLinkRepository.deleteById(result.getLinkId());
             linkRepository.deleteById(result.getLinkId());
         }
         return result;
