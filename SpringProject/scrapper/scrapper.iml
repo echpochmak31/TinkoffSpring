@@ -1,0 +1,16 @@
+git <?xml version="1.0" encoding="UTF-8"?>
+<module version="4">
+  <component name="FacetManager">
+    <facet type="jpa" name="JPA">
+      <configuration>
+        <setting name="validation-enabled" value="true" />
+        <setting name="provider-name" value="Hibernate" />
+        <datasource-mapping>
+          <factory-entry name="entityManagerFactory" value="b9eaa904-7c7f-4607-a178-e646fb190228" />
+          <factory-entry name="scrapper" value="b9eaa904-7c7f-4607-a178-e646fb190228" />
+        </datasource-mapping>
+        <naming-strategy-map />
+      </configuration>
+    </facet>
+  </component>
+</module>
