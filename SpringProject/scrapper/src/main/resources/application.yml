@@ -6,6 +6,7 @@ app:
   queue-name: "defaultQueue"
   exchange-name: "defaultExchange"
   routing-key: "defaultRoutingKey"
+  use-queue: true
 
 
 springdoc:
