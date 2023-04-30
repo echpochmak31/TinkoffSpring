@@ -14,6 +14,7 @@ public record ApplicationConfig(
         @NotNull AccessType databaseAccessType,
         @NotNull String queueName,
         @NotNull String exchangeName,
-        @NotNull String routingKey
+        @NotNull String routingKey,
+        boolean useQueue
 ) {
 }
