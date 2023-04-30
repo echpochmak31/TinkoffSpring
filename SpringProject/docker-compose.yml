@@ -40,13 +40,16 @@ services:
    - backend
  rabbitmq:
   image: 'rabbitmq:3-management'
+  hostname: rabbitmq
+  restart: always
   ports:
    - '5672:5672'
    - '15672:15672'
   environment:
    AMQP_URL: 'amqp://rabbitmq?connection_attempts=5&retry_delay=5'
-   RABBITMQ_DEFAULT_USER: "guest"
-   RABBITMQ_DEFAULT_PASS: "guest"
+   RABBITMQ_DEFAULT_USER: ${RABBIT_MQ_USER}
+   RABBITMQ_DEFAULT_PASS: ${RABBIT_MQ_PASSWORD}
+   RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: -rabbit disk_free_limit 2147483648
   volumes:
    - rabbit-mq-volume:/var/lib/rabbitmq
 
