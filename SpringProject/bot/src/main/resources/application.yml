@@ -1,6 +1,10 @@
 app:
   test: testKey
   token: ${TELEGRAM_BOT_API_TOKEN}
+  scrapper-queue:
+    queue-name: "defaultQueue"
+    exchange-name: "defaultExchange"
+    routing-key: "defaultRoutingKey"
 
 springdoc:
   swagger-ui:
