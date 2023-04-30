@@ -3,6 +3,10 @@ app:
   scheduler:
     interval: 10000
   database-access-type: jpa
+  queue-name: "defaultQueue"
+  exchange-name: "defaultExchange"
+  routing-key: "defaultRoutingKey"
+
 
 springdoc:
   swagger-ui:
