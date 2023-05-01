@@ -12,10 +12,12 @@ import com.pengrad.telegrambot.request.SetMyCommands;
 import com.pengrad.telegrambot.response.BaseResponse;
 import com.pengrad.telegrambot.response.SendResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClientRequestException;
 import ru.tinkoff.edu.java.bot.linkstracking.commands.UserMessageProcessor;
 import ru.tinkoff.edu.java.bot.linkstracking.replies.UserReplyProcessor;
 import ru.tinkoff.edu.java.bot.services.ScrapperApiService;
@@ -23,6 +25,7 @@ import ru.tinkoff.edu.java.bot.services.ScrapperApiService;
 import java.util.List;
 
 @Service
+@Slf4j
 public class LinkTrackerBot implements Bot {
     private final TelegramBot bot;
     private final UserMessageProcessor userMessageProcessor;
@@ -54,15 +57,30 @@ public class LinkTrackerBot implements Bot {
 
     @Override
     public int process(List<Update> updates) {
+        try {
+            updates.stream()
+                    .map(x -> x.message().chat().id())
+                    .distinct()
+                    .forEach(scrapperApiService::addTgChat);
 
-        updates.stream()
-                .map(x -> x.message().chat().id())
-                .distinct()
-                .forEach(scrapperApiService::addTgChat);
+            for (var update : updates) {
+                SendMessage request = isReply(update) ? userReplyProcessor.process(update) : userMessageProcessor.process(update);
+                execute(request);
+            }
 
-        for (var update : updates) {
-            SendMessage request = isReply(update) ? userReplyProcessor.process(update) : userMessageProcessor.process(update);
-            execute(request);
+        }
+        catch (WebClientRequestException webClientRequestException) {
+            log.error(webClientRequestException.toString());
+
+            var chatIds = updates.stream()
+                    .map(x -> x.message().chat().id())
+                    .distinct()
+                    .toList();
+
+            for (long chatId : chatIds) {
+                SendMessage request = new SendMessage(chatId, "Сервис временно недоступен");
+                execute(request);
+            }
         }
 
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
@@ -90,5 +108,4 @@ public class LinkTrackerBot implements Bot {
 
         bot.execute(cmds);
     }
-
 }
