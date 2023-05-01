@@ -44,7 +44,7 @@ public class LinkUpdaterScheduler {
 
     @Scheduled(fixedDelayString = "${app.scheduler.interval}")
     public void update() {
-        log.info("Update!");
+        log.info("Проверка обновлений");
 
         var linksWithUpdates = new ArrayList<Link>();
         var links = linkService.findOldest(duration);
@@ -57,7 +57,7 @@ public class LinkUpdaterScheduler {
             var apiHandlerResult = apiHandler.handle(parseResult, link);
 
             if (apiHandlerResult.hasUpdate()) {
-                log.info(apiHandlerResult.description());
+                log.info("Есть обновления для ссылки " + link.getUrl());
 
                 linksWithUpdates.add(link);
                 var chatIds = chatService
@@ -92,8 +92,5 @@ public class LinkUpdaterScheduler {
         stackOverflowLinkCache.clear();
     }
 
-    private void handleLink(Link link) {
-
-    }
 }
 

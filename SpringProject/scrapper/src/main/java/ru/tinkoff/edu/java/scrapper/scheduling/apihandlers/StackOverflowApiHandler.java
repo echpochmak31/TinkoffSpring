@@ -32,7 +32,6 @@ public class StackOverflowApiHandler implements ApiHandler {
                 var commentsResponse = stackOverflowApiService.getComments(stackOverflowParseResult.getQuestionId());
 
                 var description = new StringBuilder();
-                description.append("Есть обновления!\n");
 
                 if (cache.containsKey(link.getLinkId())) {
                     var oldLink = cache.get(link.getLinkId());
