@@ -16,7 +16,6 @@ public record LinkUpdateRequest(
         String url,
         @NonNull
         String description,
-//        @NonNull
         Long[] tgChatsIds
 ) {
 }
