@@ -14,6 +14,10 @@ server:
   port: 8081
 
 meta:
+  rabbitmq:
+    hostname: "localhost"
+    user: ${SCRAPPER_RABBIT_MQ_USER}
+    password: ${SCRAPPER_RABBIT_MQ_PASSWORD}
   paths:
     help-command-md: "./bot/src/main/resources/helpCommand.md"
   scrapper:

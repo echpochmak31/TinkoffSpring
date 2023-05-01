@@ -2,22 +2,19 @@ package ru.tinkoff.edu.java.bot;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import ru.tinkoff.edu.java.bot.clients.dto.ScrapperLinkRequest;
-import ru.tinkoff.edu.java.bot.clients.dto.ScrapperLinkResponse;
-import ru.tinkoff.edu.java.bot.clients.dto.ScrapperListLinkResponse;
-import ru.tinkoff.edu.java.bot.clients.dto.ScrapperTgChatResponse;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.tinkoff.edu.java.bot.dto.LinkUpdateRequest;
 import ru.tinkoff.edu.java.bot.dto.LinkUpdateResponse;
-import ru.tinkoff.edu.java.bot.services.MessageHandler;
-import ru.tinkoff.edu.java.bot.services.ScrapperApiService;
+import ru.tinkoff.edu.java.bot.services.LinkUpdateMessageHandler;
 
 @RestController
 @RequestMapping("/updates")
 @RequiredArgsConstructor
 public class BotApiController {
-    private final MessageHandler messageHandler;
+    private final LinkUpdateMessageHandler messageHandler;
 
     @PostMapping
     public LinkUpdateResponse createUpdate(@Valid @RequestBody LinkUpdateRequest request) {

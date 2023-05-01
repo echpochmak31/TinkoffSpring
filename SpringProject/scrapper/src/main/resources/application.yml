@@ -40,6 +40,10 @@ spring:
     change-log: migrations/master.xml
 
 meta:
+  rabbitmq:
+    hostname: "localhost"
+    user: ${SCRAPPER_RABBIT_MQ_USER}
+    password: ${SCRAPPER_RABBIT_MQ_PASSWORD}
   updates:
    check-interval: "PT15S"
    github-events-per-page: 10
