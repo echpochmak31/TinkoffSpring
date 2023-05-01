@@ -20,6 +20,7 @@ import ru.tinkoff.edu.java.bot.linkstracking.commands.DefaultUserMessageProcesso
 import ru.tinkoff.edu.java.bot.linkstracking.links.LinksRepository;
 import ru.tinkoff.edu.java.bot.linkstracking.replies.DefaultUserReplyProcessor;
 import ru.tinkoff.edu.java.bot.linkstracking.users.UserRepository;
+import ru.tinkoff.edu.java.bot.services.ScrapperApiService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,6 +40,8 @@ public class BotTests {
     LinkTrackerBot linkTrackerBot;
     @Mock
     TelegramBot bot;
+    @Mock
+    ScrapperApiService scrapperApiService;
     @Captor
     ArgumentCaptor<? extends BaseRequest<SendMessage, SendResponse>> sendMessageCaptor;
 
@@ -59,11 +62,13 @@ public class BotTests {
     public void setup() {
         updates = new ArrayList<>();
 
-        linksRepository = new LinksRepository(new ArrayList<>());
+        Mockito.when(scrapperApiService.addLink())
+
+        linksRepository = new LinksRepository(scrapperApiService);
         var userInfoRepository = new UserRepository(new HashMap<>());
         var messageProcessor = new DefaultUserMessageProcessor(linksRepository, userInfoRepository, path);
         var replyProcessor = new DefaultUserReplyProcessor(linksRepository);
-        linkTrackerBot = new LinkTrackerBot("fakeToken", messageProcessor, replyProcessor);
+        linkTrackerBot = new LinkTrackerBot("fakeToken", messageProcessor, replyProcessor, scrapperApiService);
 
         ReflectionTestUtils.setField(linkTrackerBot, "bot", bot);
     }

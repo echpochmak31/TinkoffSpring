@@ -11,12 +11,14 @@ import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SetMyCommands;
 import com.pengrad.telegrambot.response.BaseResponse;
 import com.pengrad.telegrambot.response.SendResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.tinkoff.edu.java.bot.linkstracking.commands.UserMessageProcessor;
 import ru.tinkoff.edu.java.bot.linkstracking.replies.UserReplyProcessor;
+import ru.tinkoff.edu.java.bot.services.ScrapperApiService;
 
 import java.util.List;
 
@@ -25,14 +27,17 @@ public class LinkTrackerBot implements Bot {
     private final TelegramBot bot;
     private final UserMessageProcessor userMessageProcessor;
     private final UserReplyProcessor userReplyProcessor;
+    private final ScrapperApiService scrapperApiService;
 
     @Autowired
     public LinkTrackerBot(@Value("${app.token}") String token,
                           @Qualifier("defaultUserMessageProcessor") UserMessageProcessor userMessageProcessor,
-                          @Qualifier("defaultUserReplyProcessor") UserReplyProcessor userReplyProcessor) {
+                          @Qualifier("defaultUserReplyProcessor") UserReplyProcessor userReplyProcessor,
+                          ScrapperApiService scrapperApiService) {
         bot = new TelegramBot(token);
         this.userMessageProcessor = userMessageProcessor;
         this.userReplyProcessor = userReplyProcessor;
+        this.scrapperApiService = scrapperApiService;
         start();
     }
 
@@ -49,6 +54,11 @@ public class LinkTrackerBot implements Bot {
 
     @Override
     public int process(List<Update> updates) {
+
+        updates.stream()
+                .map(x -> x.message().chat().id())
+                .distinct()
+                .forEach(scrapperApiService::addTgChat);
 
         for (var update : updates) {
             SendMessage request = isReply(update) ? userReplyProcessor.process(update) : userMessageProcessor.process(update);
