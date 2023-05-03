@@ -2,8 +2,6 @@ name: bot cicd flow
 
 on:
   push:
-    paths:
-      - 'bot/**'
     branches: [ "main", "hw8"]
   pull_request:
     paths:
