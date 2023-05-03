@@ -1,7 +1,4 @@
 name: scrapper cicd flow
-runs:
-  using: 'docker'
-  image: 'alpine:3.10'
 
 on:
   push:
