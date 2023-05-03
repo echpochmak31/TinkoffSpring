@@ -4,7 +4,6 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
 import lombok.AllArgsConstructor;
-
 import java.util.function.Consumer;
 
 @AllArgsConstructor
@@ -13,6 +12,7 @@ public class StartCommand implements Command {
     private static final String startCommandDescription = "зарегистрировать пользователя";
     private static final String executeMessage = "Поехали!";
     private final Consumer<User> userConsumer;
+
     @Override
     public String command() {
         return startCommand;

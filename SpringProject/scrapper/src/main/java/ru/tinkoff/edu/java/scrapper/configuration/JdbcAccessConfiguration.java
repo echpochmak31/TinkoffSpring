@@ -1,6 +1,5 @@
 package ru.tinkoff.edu.java.scrapper.configuration;
 
-
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +25,9 @@ public class JdbcAccessConfiguration {
     }
 
     @Bean
-    public JdbcStackOverflowLinkService jdbcStackOverflowLinkService(JdbcTemplateStackOverflowLinkRepository stackOverflowLinkRepository) {
+    public JdbcStackOverflowLinkService jdbcStackOverflowLinkService(
+        JdbcTemplateStackOverflowLinkRepository stackOverflowLinkRepository
+    ) {
         return new JdbcStackOverflowLinkService(stackOverflowLinkRepository);
     }
 }

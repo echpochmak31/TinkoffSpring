@@ -12,6 +12,7 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
+@SuppressWarnings("checkstyle:MultipleStringLiterals")
 public class JdbcTemplateChatRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 

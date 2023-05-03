@@ -6,7 +6,6 @@ import ru.tinkoff.edu.java.scrapper.dao.jpa.JpaChatRepository;
 import ru.tinkoff.edu.java.scrapper.dao.models.TgChat;
 import ru.tinkoff.edu.java.scrapper.exceptions.ResourceNotFoundException;
 import ru.tinkoff.edu.java.scrapper.services.ChatService;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -26,8 +25,9 @@ public class JpaChatService implements ChatService {
     public TgChat removeChat(long tgChatId) {
         Optional<TgChat> result = chatRepository.findById(tgChatId);
 
-        if (result.isEmpty())
+        if (result.isEmpty()) {
             throw ResourceNotFoundException.chatNotFound(tgChatId);
+        }
 
         chatRepository.deleteById(tgChatId);
         return result.get();

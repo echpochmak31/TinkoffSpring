@@ -11,6 +11,10 @@ import ru.tinkoff.edu.java.scrapper.scheduling.Scheduler;
 public record ApplicationConfig(
         @NotNull String test,
         @NotNull Scheduler scheduler,
-        @NotNull AccessType databaseAccessType
+        @NotNull AccessType databaseAccessType,
+        @NotNull String queueName,
+        @NotNull String exchangeName,
+        @NotNull String routingKey,
+        boolean useQueue
 ) {
 }

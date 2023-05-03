@@ -6,7 +6,7 @@ import ru.tinkoff.edu.java.scrapper.dao.models.Link;
 
 @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
 public class UpdatesReceivingException extends ScrapperException {
-    private UpdatesReceivingException(String message) {
+    protected UpdatesReceivingException(String message) {
         super(message);
     }
 

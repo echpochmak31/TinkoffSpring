@@ -1,18 +1,27 @@
 package ru.tinkoff.edu.java.scrapper.dao.models;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.PastOrPresent;
-import lombok.*;
-import org.hibernate.mapping.Collection;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.ToString;
 import org.hibernate.validator.constraints.URL;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Data
@@ -41,30 +50,25 @@ public class Link {
     @PastOrPresent
     @Column(name = "last_check")
     private OffsetDateTime lastCheck;
+    @Getter
+    @Builder.Default
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "link_chat",
+        schema = "links",
+        joinColumns = @JoinColumn(name = "link_id"),
+        inverseJoinColumns = @JoinColumn(name = "chat_id")
+    )
+    private List<TgChat> tgChats = new ArrayList<>();
 
     public Link() {
 
     }
 
-    @Getter
-    @Builder.Default
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "link_chat",
-            schema = "links",
-            joinColumns = @JoinColumn(name = "link_id"),
-            inverseJoinColumns = @JoinColumn(name = "chat_id")
-    )
-    private List<TgChat> tgChats = new ArrayList<>();
-
-    // todo make sure it will work with JpaRepository
-//    public List<TgChat> getTgChats() {
-//        return Collections.unmodifiableList(tgChats);
-//    }
-
     public void addChatIfNotExists(@NonNull TgChat tgChat) {
-        if (!tgChats.contains(tgChat))
+        if (!tgChats.contains(tgChat)) {
             tgChats.add(tgChat);
+        }
     }
 
     public boolean removeChat(@NonNull TgChat tgChat) {

@@ -2,11 +2,9 @@ package ru.tinkoff.edu.java.parser.handlers;
 
 import lombok.NonNull;
 import ru.tinkoff.edu.java.parser.exceptions.UrlParseException;
-import ru.tinkoff.edu.java.parser.handlers.LinkHandler;
 import ru.tinkoff.edu.java.parser.models.UserRepoPair;
 import ru.tinkoff.edu.java.parser.results.GitHubParseResult;
 import ru.tinkoff.edu.java.parser.results.ParseResult;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Optional;
@@ -21,6 +19,7 @@ public class GitHubLinkHandler implements LinkHandler {
     public GitHubLinkHandler() {
         next = null;
     }
+
     @Override
     public void setNext(@NonNull LinkHandler next) {
         this.next = next;
@@ -28,11 +27,13 @@ public class GitHubLinkHandler implements LinkHandler {
 
     @Override
     public ParseResult handle(@NonNull String link) {
-        if (matches(link))
+        if (matches(link)) {
             return new GitHubParseResult(link, parseUserRepoPair(link));
+        }
 
-        if (next == null)
+        if (next == null) {
             return null;
+        }
 
         return Optional.of(next).map(x -> next.handle(link)).orElse(null);
     }
@@ -58,8 +59,7 @@ public class GitHubLinkHandler implements LinkHandler {
                 return new UserRepoPair(username, repository);
             }
             throw UrlParseException.parseFailure(hostName, link);
-        }
-        catch (MalformedURLException exception) {
+        } catch (MalformedURLException exception) {
             throw UrlParseException.parseFailure(hostName, link);
         }
     }

@@ -12,9 +12,6 @@ import org.springframework.validation.annotation.Validated;
 @Data
 @AllArgsConstructor
 public class LinkResponse {
-    public LinkResponse() {
-
-    }
     @NonNull
     @Min(0)
     Long chatId;
@@ -22,4 +19,8 @@ public class LinkResponse {
     @NotBlank
     @URL
     String url;
+
+    public LinkResponse() {
+
+    }
 }

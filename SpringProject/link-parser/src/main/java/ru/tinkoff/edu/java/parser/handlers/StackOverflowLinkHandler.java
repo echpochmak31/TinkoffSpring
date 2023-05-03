@@ -2,10 +2,8 @@ package ru.tinkoff.edu.java.parser.handlers;
 
 import lombok.NonNull;
 import ru.tinkoff.edu.java.parser.exceptions.UrlParseException;
-import ru.tinkoff.edu.java.parser.handlers.LinkHandler;
 import ru.tinkoff.edu.java.parser.results.ParseResult;
 import ru.tinkoff.edu.java.parser.results.StackOverflowParseResult;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Optional;
@@ -28,11 +26,13 @@ public class StackOverflowLinkHandler implements LinkHandler {
 
     @Override
     public ParseResult handle(@NonNull String link) {
-        if (matches(link))
+        if (matches(link)) {
             return new StackOverflowParseResult(link, parseQuestionId(link));
+        }
 
-        if (next == null)
+        if (next == null) {
             return null;
+        }
 
         return Optional.of(next).map(x -> next.handle(link)).orElse(null);
     }
