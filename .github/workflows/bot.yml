@@ -3,6 +3,7 @@ name: bot cicd flow
 on:
   push:
     paths:
+      - .github/workflows/bot.yml
       - SpringProject/bot/**
     branches: [ "main", "hw8"]
   pull_request:
@@ -29,3 +30,12 @@ jobs:
         run: |
          cd SpringProject/
          mvn package -pl bot -am
+      - name: Push Docker image
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          image: ${{ secrets.DOCKER_USERNAME }}/tinkoff-spring-project
+          tags: latest
+          registry: docker.io
+          dockerfile: scrapper.Dockerfile
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
