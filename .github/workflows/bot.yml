@@ -21,5 +21,7 @@ jobs:
           java-version: '17'
           distribution: 'oracle'
           cache: maven
+      - name: List all files
+	run: ls -la
       - name: Build with Maven
-        run: mvn package -pl bot -am
+        run: mvn package -pl :bot -am
