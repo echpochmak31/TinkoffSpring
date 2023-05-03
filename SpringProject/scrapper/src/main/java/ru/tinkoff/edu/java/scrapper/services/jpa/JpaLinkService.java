@@ -71,8 +71,10 @@ public class JpaLinkService implements LinkService {
         result.removeChat(chat);
         chatRepository.saveAndFlush(chat);
         if (result.getTgChats().isEmpty()) {
-            stackOverflowLinkRepository.deleteById(result.getLinkId());
-            linkRepository.deleteById(result.getLinkId());
+            if (stackOverflowLinkRepository.existsById(result.getLinkId()))
+                stackOverflowLinkRepository.deleteById(result.getLinkId());
+            if (linkRepository.existsById(result.getLinkId()))
+                linkRepository.deleteById(result.getLinkId());
         }
         return result;
     }
