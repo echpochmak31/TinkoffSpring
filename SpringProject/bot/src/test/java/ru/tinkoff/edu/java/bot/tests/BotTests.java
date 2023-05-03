@@ -64,8 +64,6 @@ public class BotTests {
     public void setup() {
         updates = new ArrayList<>();
 
-//        Mockito.when(scrapperApiService.addLink());
-
         linksRepository = new LinksRepository(scrapperApiService);
         var userInfoRepository = new UserRepository(new HashMap<>());
         var messageProcessor = new DefaultUserMessageProcessor(linksRepository, userInfoRepository, path);
