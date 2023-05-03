@@ -24,4 +24,4 @@ jobs:
       - name: List all files
         run: ls -la
       - name: Build with Maven
-        run: mvn package -pl SpringProject/bot -am
+        run: mvn package -e -pl SpringProject/bot -am
