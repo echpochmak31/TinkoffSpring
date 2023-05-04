@@ -14,7 +14,7 @@ on:
 
 env:
   REGISTRY: ghcr.io/echpochmak31
-  IMAGE_NAME: tinkoff-spring/bot
+  IMAGE_NAME: tinkoff-spring-bot
 
 jobs:
 
