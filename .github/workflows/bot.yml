@@ -43,6 +43,12 @@ jobs:
          cd SpringProject/
          mvn package -pl bot -am
 
+      - name: List SpringProject/bot
+        run: ls SpringProject/bot
+
+      - name: List SpringProject/bot/target
+        run: ls SpringProject/bot/target/
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
