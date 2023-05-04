@@ -60,4 +60,4 @@ jobs:
           context: "{{defaultContext}}:SpringProject"
           file: bot.Dockerfile
           push: true
-          tags: latest
+          tags: demo
