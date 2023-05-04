@@ -58,7 +58,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build image
-        run: docker build -f SpringProject/bot/bot.Dockerfile -t ${{env.IMAGE_NAME}}:latest ./SpringProject/bot/
+        run: docker build -f SpringProject/bot/bot.Dockerfile -t ${{env.REGISTRY}}/${{env.IMAGE_NAME}}:latest ./SpringProject/bot/
 
       - name: List docker images
         run: docker image ls
