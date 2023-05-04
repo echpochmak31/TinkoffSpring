@@ -12,6 +12,9 @@ on:
       - SpringProject/bot/**
     branches: [ "main" ]
 
+permissions:
+  packages: write
+
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: bot
