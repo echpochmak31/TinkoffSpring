@@ -13,8 +13,9 @@ on:
     branches: [ "main" ]
 
 env:
-  REGISTRY: ghcr.io/echpochmak31
-  IMAGE_NAME: tinkoff-spring-bot
+  REGISTRY: ghcr.io
+  IMAGE_NAME: bot
+  IMAGE_VERSION: latest
 
 jobs:
 
@@ -58,13 +59,13 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build image
-        run: docker build -f SpringProject/bot/bot.Dockerfile -t ${{env.REGISTRY}}/${{env.IMAGE_NAME}}:latest ./SpringProject/bot/
+        run: docker build -f SpringProject/bot/bot.Dockerfile -t ${{env.REGISTRY}}/${{github.actor}}/${{env.IMAGE_NAME}}:${{env.IMAGE_VERSION}} ./SpringProject/bot/
 
       - name: List docker images
         run: docker image ls
 
       - name: Push image
-        run: docker push ${{env.REGISTRY}}/${{env.IMAGE_NAME}}:latest
+        run: docker push ${{env.REGISTRY}}/${{github.actor}}/${{env.IMAGE_NAME}}:${{env.IMAGE_VERSION}}
 
 #      - name: Build and push Docker image
 #        uses: docker/build-push-action@v4
