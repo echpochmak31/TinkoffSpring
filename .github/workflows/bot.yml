@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - .github/workflows/bot.yml
+      - SpringProject/bot.Dockerfile
       - SpringProject/bot/**
     branches: [ "main", "hw8"]
   pull_request:
