@@ -60,6 +60,9 @@ jobs:
       - name: Build image
         run: docker build -f SpringProject/bot/bot.Dockerfile -t ${{env.IMAGE_NAME}}:latest ./SpringProject/bot/
 
+      - name: List docker images
+        run: docker image ls
+
       - name: Push image
         run: docker push ${{env.REGISTRY}}/${{env.IMAGE_NAME}}:latest
 
