@@ -23,7 +23,7 @@ public class UntrackCommandReply implements Reply {
         if (!urlValidator.isValid(update.message().text()))
             return new SendMessage(update.message().chat().id(), invalidLinkMessage);
 
-        linksUntracker.untrack(update.message().text());
+        linksUntracker.untrack(update.message().chat().id(), update.message().text());
         return new SendMessage(update.message().chat().id(), stopTrackingMessage);
     }
 }

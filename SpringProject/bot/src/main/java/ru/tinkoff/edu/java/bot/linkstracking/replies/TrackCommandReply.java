@@ -4,6 +4,7 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import lombok.AllArgsConstructor;
 import org.apache.commons.validator.routines.UrlValidator;
+import ru.tinkoff.edu.java.bot.linkstracking.commands.TrackCommandConstants;
 import ru.tinkoff.edu.java.bot.linkstracking.commands.UntrackCommandConstants;
 import ru.tinkoff.edu.java.bot.linkstracking.links.LinksTracker;
 
@@ -16,7 +17,7 @@ public class TrackCommandReply implements Reply {
     private final LinksTracker linksTracker;
     @Override
     public String reply() {
-        return UntrackCommandConstants.untrackCommandExecuteMessage;
+        return TrackCommandConstants.trackCommandExecuteMessage;
     }
 
     @Override
@@ -24,7 +25,7 @@ public class TrackCommandReply implements Reply {
         if (!urlValidator.isValid(update.message().text()))
             return new SendMessage(update.message().chat().id(), invalidLinkMessage);
 
-        linksTracker.track(update.message().text());
+        linksTracker.track(update.message().chat().id(), update.message().text());
         return new SendMessage(update.message().chat().id(), beginTrackingMessage);
     }
 }

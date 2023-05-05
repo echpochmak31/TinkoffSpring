@@ -1,30 +1,29 @@
 package ru.tinkoff.edu.java.bot.linkstracking.links;
 
-import lombok.AllArgsConstructor;
-import lombok.NonNull;
-import org.hibernate.validator.constraints.URL;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import ru.tinkoff.edu.java.bot.services.ScrapperApiService;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.function.Supplier;
 
 @Component
-@AllArgsConstructor
-public class LinksRepository implements Supplier<List<String>>, LinksTracker, LinksUntracker {
-    private List<String> links;
+@RequiredArgsConstructor
+public class LinksRepository implements LinksProvider, LinksTracker, LinksUntracker {
+    private final ScrapperApiService scrapperApiService;
 
     @Override
-    public List<String> get() {
-        return links;
+    public void track(long tgChatId, String link) {
+        scrapperApiService.addLink(tgChatId, link);
     }
 
     @Override
-    public void track(@NonNull @URL String link) {
-        links.add(link);
+    public void untrack(long tgChatId, String link) {
+        scrapperApiService.deleteLink(tgChatId, link);
     }
 
     @Override
-    public boolean untrack(@NonNull @URL String link) {
-        return links.remove(link);
+    public List<String> getLinks(long tgChatId) {
+        return Arrays.stream(scrapperApiService.getLinks(tgChatId).links()).map(x -> x.url().toString()).toList();
     }
 }

@@ -62,8 +62,6 @@ public class GitHubApiHandler implements ApiHandler {
     private String generateDescription(GitHubApiEventResponse[] eventList, OffsetDateTime lastUpdate) {
         var stringBuilder = new StringBuilder();
 
-        stringBuilder.append("Есть обновления!\n");
-
         Arrays.stream(eventList)
                 .filter(x -> x.createdAt().isAfter(lastUpdate))
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
