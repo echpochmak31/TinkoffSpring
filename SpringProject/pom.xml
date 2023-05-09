@@ -23,6 +23,7 @@
         <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
         <liquibase.version>4.20.0</liquibase.version>
         <testcontainers.version>1.17.0</testcontainers.version>
+        <checkstyle.config.location>checkstyle.xml</checkstyle.config.location>
     </properties>
 
     <dependencyManagement>
