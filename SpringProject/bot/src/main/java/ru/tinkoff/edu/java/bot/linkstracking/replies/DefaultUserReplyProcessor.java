@@ -5,7 +5,6 @@ import com.pengrad.telegrambot.request.SendMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.tinkoff.edu.java.bot.linkstracking.links.LinksRepository;
-
 import java.util.List;
 
 @Component("defaultUserReplyProcessor")
@@ -15,11 +14,10 @@ public class DefaultUserReplyProcessor implements UserReplyProcessor {
 
     public DefaultUserReplyProcessor(@Autowired LinksRepository linksRepository) {
         replies = List.of(
-                new TrackCommandReply(linksRepository),
-                new UntrackCommandReply(linksRepository)
+            new TrackCommandReply(linksRepository),
+            new UntrackCommandReply(linksRepository)
         );
     }
-
 
     @Override
     public List<? extends Reply> replies() {
@@ -30,8 +28,9 @@ public class DefaultUserReplyProcessor implements UserReplyProcessor {
     public SendMessage process(Update update) {
 
         for (var reply : replies) {
-            if (reply.supports(update))
+            if (reply.supports(update)) {
                 return reply.handle(update);
+            }
         }
 
         return new SendMessage(update.message().chat().id(), unsupportedReplyMessage);

@@ -3,7 +3,6 @@ package ru.tinkoff.edu.java.bot.linkstracking.commands;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import lombok.AllArgsConstructor;
-
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -27,8 +26,9 @@ public class ListCommand implements Command {
 
     @Override
     public SendMessage handle(Update update) {
-        if (linksSupplier.get().isEmpty())
+        if (linksSupplier.get().isEmpty()) {
             return new SendMessage(update.message().chat().id(), noLinksMessage);
+        }
 
         var stringBuilder = new StringBuilder();
         stringBuilder.append(executeMessage);

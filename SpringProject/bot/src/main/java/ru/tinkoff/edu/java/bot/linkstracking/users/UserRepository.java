@@ -4,7 +4,6 @@ import com.pengrad.telegrambot.model.User;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.stereotype.Component;
-
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -12,6 +11,7 @@ import java.util.function.Consumer;
 @AllArgsConstructor
 public class UserRepository implements Consumer<User> {
     private Map<Long, UserInfo> userInfoMap;
+
     @Override
     public void accept(@NonNull User user) {
         var info = new UserInfo(user.id(), user.username());

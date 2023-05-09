@@ -14,6 +14,7 @@ public class TrackCommandReply implements Reply {
 
     private static final UrlValidator urlValidator = new UrlValidator();
     private final LinksTracker linksTracker;
+
     @Override
     public String reply() {
         return UntrackCommandConstants.untrackCommandExecuteMessage;
@@ -21,8 +22,9 @@ public class TrackCommandReply implements Reply {
 
     @Override
     public SendMessage handle(Update update) {
-        if (!urlValidator.isValid(update.message().text()))
+        if (!urlValidator.isValid(update.message().text())) {
             return new SendMessage(update.message().chat().id(), invalidLinkMessage);
+        }
 
         linksTracker.track(update.message().text());
         return new SendMessage(update.message().chat().id(), beginTrackingMessage);
