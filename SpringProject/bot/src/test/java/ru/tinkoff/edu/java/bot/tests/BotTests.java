@@ -1,4 +1,4 @@
-
+package ru.tinkoff.edu.java.bot.tests;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Chat;
@@ -22,19 +22,17 @@ import ru.tinkoff.edu.java.bot.linkstracking.commands.DefaultUserMessageProcesso
 import ru.tinkoff.edu.java.bot.linkstracking.links.LinksRepository;
 import ru.tinkoff.edu.java.bot.linkstracking.replies.DefaultUserReplyProcessor;
 import ru.tinkoff.edu.java.bot.linkstracking.users.UserRepository;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 public class BotTests {
+    private static String text = "text";
     List<Update> updates;
     Update fakeUpdate;
-
     @Value("${meta.paths.help-command-md}")
     String path;
     LinksRepository linksRepository;
@@ -50,7 +48,7 @@ public class BotTests {
         Update result = new Update();
 
         ReflectionTestUtils.setField(fakeChat, "id", 1L);
-        ReflectionTestUtils.setField(fakeMessage, "text", fakeText);
+        ReflectionTestUtils.setField(fakeMessage, text, fakeText);
         ReflectionTestUtils.setField(fakeMessage, "chat", fakeChat);
         ReflectionTestUtils.setField(result, "message", fakeMessage);
 
@@ -132,11 +130,11 @@ public class BotTests {
         Mockito.verify(bot).execute(sendMessageCaptor.capture());
 
         BaseRequest<SendMessage, SendResponse> value = sendMessageCaptor.getValue();
-        String realText = (String) value.getParameters().get("text");
+        String realText = (String) value.getParameters().get(text);
 
         assertAll(
-                () -> assertEquals(unknownCommand, fakeUpdate.message().text()),
-                () -> assertEquals("Неподдерживаемая команда", realText)
+            () -> assertEquals(unknownCommand, fakeUpdate.message().text()),
+            () -> assertEquals("Неподдерживаемая команда", realText)
         );
     }
 }
