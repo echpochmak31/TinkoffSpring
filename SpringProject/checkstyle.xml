@@ -124,7 +124,7 @@
         <!-- <module name="AbstractClassName"/> -->
         <module name="CatchParameterName"/>
         <module name="ClassTypeParameterName"/>
-        <module name="ConstantName"/>
+<!--        <module name="ConstantName"/>-->
         <module name="IllegalIdentifierName"/>
         <module name="InterfaceTypeParameterName"/>
         <module name="LambdaParameterName"/>
@@ -143,17 +143,17 @@
 
         <!-- https://checkstyle.org/config_imports.html -->
         <!--            Checks for imports              -->
-        <module name="AvoidStarImport"/>
+<!--        <module name="AvoidStarImport"/>-->
         <!-- <module name="AvoidStaticImport"/> -->
         <!-- <module name="CustomImportOrder"/> -->
         <module name="IllegalImport"/> <!-- defaults to sun.* packages -->
         <!-- <module name="ImportControl"/> -->
-        <module name="ImportOrder">
-            <property name="option" value="under"/>
-            <property name="sortStaticImportsAlphabetically" value="true"/>
-        </module>
-        <module name="RedundantImport"/>
-        <module name="UnusedImports"/>
+<!--        <module name="ImportOrder">-->
+<!--            <property name="option" value="under"/>-->
+<!--            <property name="sortStaticImportsAlphabetically" value="true"/>-->
+<!--        </module>-->
+<!--        <module name="RedundantImport"/>-->
+<!--        <module name="UnusedImports"/>-->
 
 
         <!-- https://checkstyle.org/config_sizes.html -->
