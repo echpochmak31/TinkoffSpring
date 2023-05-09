@@ -67,6 +67,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+<<<<<<< HEAD
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
@@ -78,3 +79,16 @@ jobs:
         run: |
          cd SpringProject/
          mvn -pl scrapper -am checkstyle:check
+=======
+        - name: Set up JDK 17
+          uses: actions/setup-java@v3
+          with:
+            java-version: '17'
+            distribution: 'oracle'
+            cache: maven
+
+        - name: Build with checkstyle
+          run: |
+           cd SpringProject/
+           mvn -pl scrapper -am checkstyle:check
+>>>>>>> 4675a09 (ci: add checkstyle job to scrapper.yml)
