@@ -15,5 +15,4 @@ public class GitHubParseResult extends ParseResult {
         this.userRepoPair = userRepoPair;
     }
 
-
 }

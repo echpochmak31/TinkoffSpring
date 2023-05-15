@@ -15,7 +15,8 @@ public class ScrapperChatsHttpClient {
     private String baseUrl;
     private WebClient webClient;
 
-    public ScrapperChatsHttpClient() { }
+    public ScrapperChatsHttpClient() {
+    }
 
     public ScrapperChatsHttpClient(@NonNull @URL String baseUrl) {
         this.baseUrl = baseUrl;
@@ -23,24 +24,24 @@ public class ScrapperChatsHttpClient {
 
     public ScrapperTgChatResponse addTgChat(@NonNull Long tgChatId) {
         return webClient
-                .post()
-                .uri(UriBuilder -> UriBuilder
-                        .path(pathToTgChatById)
-                        .build(tgChatId))
-                .retrieve()
-                .bodyToMono(ScrapperTgChatResponse.class)
-                .block();
+            .post()
+            .uri(uriBuilder -> uriBuilder
+                .path(pathToTgChatById)
+                .build(tgChatId))
+            .retrieve()
+            .bodyToMono(ScrapperTgChatResponse.class)
+            .block();
     }
 
     public ScrapperTgChatResponse deleteTgChat(@NonNull Long tgChatId) {
         return webClient
-                .delete()
-                .uri(UriBuilder -> UriBuilder
-                        .path(pathToTgChatById)
-                        .build(tgChatId))
-                .retrieve()
-                .bodyToMono(ScrapperTgChatResponse.class)
-                .block();
+            .delete()
+            .uri(uriBuilder -> uriBuilder
+                .path(pathToTgChatById)
+                .build(tgChatId))
+            .retrieve()
+            .bodyToMono(ScrapperTgChatResponse.class)
+            .block();
     }
 
     @PostConstruct

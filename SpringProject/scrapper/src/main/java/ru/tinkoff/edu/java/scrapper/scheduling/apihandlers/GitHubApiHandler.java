@@ -9,7 +9,6 @@ import ru.tinkoff.edu.java.scrapper.dao.models.Link;
 import ru.tinkoff.edu.java.scrapper.exceptions.UpdatesReceivingException;
 import ru.tinkoff.edu.java.scrapper.services.GitHubApiService;
 import ru.tinkoff.edu.java.scrapper.webclients.dto.github.GitHubApiEventResponse;
-
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Map;
@@ -29,27 +28,29 @@ public class GitHubApiHandler implements ApiHandler {
 
             UserRepoPair userRepoPair = gitHubParseResult.getUserRepoPair();
             GitHubApiEventResponse[] eventList = gitHubApiService
-                    .getEvents(userRepoPair.user(), userRepoPair.repository());
+                .getEvents(userRepoPair.user(), userRepoPair.repository());
 
-            if (eventList == null || eventList.length == 0)
+            if (eventList == null || eventList.length == 0) {
                 throw UpdatesReceivingException.gitHubUpdatesFailure(link);
+            }
 
             OffsetDateTime actualLastUpdate = eventList[0].createdAt();
 
             if (link.getLastUpdate() == null || actualLastUpdate.isAfter(link.getLastUpdate())) {
 
                 result.toBuilder()
-                        .hasUpdate(true)
-                        .description(generateDescription(eventList, link.getLastUpdate()))
-                        .build();
+                    .hasUpdate(true)
+                    .description(generateDescription(eventList, link.getLastUpdate()))
+                    .build();
 
                 link.setLastUpdate(actualLastUpdate);
 
                 return result;
             }
             return result;
-        } else if (next == null)
+        } else if (next == null) {
             return result;
+        }
 
         return next.handle(parseResult, link);
     }
@@ -63,13 +64,13 @@ public class GitHubApiHandler implements ApiHandler {
         var stringBuilder = new StringBuilder();
 
         Arrays.stream(eventList)
-                .filter(x -> x.createdAt().isAfter(lastUpdate))
-                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
-                .entrySet()
-                .stream()
-                .filter(x -> x.getValue() == 1)
-                .map(Map.Entry::getKey)
-                .forEach(x -> stringBuilder.append(x.type()).append("\n"));
+            .filter(x -> x.createdAt().isAfter(lastUpdate))
+            .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+            .entrySet()
+            .stream()
+            .filter(x -> x.getValue() == 1)
+            .map(Map.Entry::getKey)
+            .forEach(x -> stringBuilder.append(x.type()).append("\n"));
 
         return stringBuilder.toString();
     }

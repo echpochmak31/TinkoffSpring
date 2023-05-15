@@ -14,9 +14,10 @@ public class MessageSender {
     private final ApplicationConfig applicationConfig;
 
     public void sendToBot(LinkUpdateMessage message) {
-        if (applicationConfig.useQueue())
+        if (applicationConfig.useQueue()) {
             scrapperQueueProducer.send(applicationConfig.exchangeName(), applicationConfig.routingKey(), message);
-        else
+        } else {
             botHttpClient.update(message.linkId(), message.url(), message.description(), message.tgChatIds());
+        }
     }
 }

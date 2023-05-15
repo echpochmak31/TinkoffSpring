@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Primary;
 import ru.tinkoff.edu.java.scrapper.dao.models.StackOverflowLink;
 import ru.tinkoff.edu.java.scrapper.services.GitHubApiService;
 import ru.tinkoff.edu.java.scrapper.services.StackOverflowApiService;
-
 import java.util.HashMap;
 
 @Configuration
@@ -18,7 +17,10 @@ public class ApiHandlersConfig {
 
     @Bean
     @Primary
-    public GitHubApiHandler gitHubApiHandler(GitHubApiService gitHubApiService, StackOverflowApiHandler stackOverflowApiHandler) {
+    public GitHubApiHandler gitHubApiHandler(
+        GitHubApiService gitHubApiService,
+        StackOverflowApiHandler stackOverflowApiHandler
+    ) {
         var gitHubApiHandler = new GitHubApiHandler(gitHubApiService);
         gitHubApiHandler.setNext(stackOverflowApiHandler);
         return gitHubApiHandler;
@@ -26,10 +28,10 @@ public class ApiHandlersConfig {
 
     @Bean
     public StackOverflowApiHandler stackOverflowApiHandler(
-            StackOverflowApiService stackOverflowApiService,
-            HashMap<Long, StackOverflowLink> stackOverflowLinkCache) {
+        StackOverflowApiService stackOverflowApiService,
+        HashMap<Long, StackOverflowLink> stackOverflowLinkCache
+    ) {
         return new StackOverflowApiHandler(stackOverflowApiService, stackOverflowLinkCache);
     }
-
 
 }
