@@ -8,7 +8,8 @@ import java.net.URI;
 
 @Valid
 public record ScrapperLinkResponse(
-        @NonNull @Min(0) Long id,
+        // todo non null?
+        @Min(0) Long id,
         @NonNull URI url
 ) {
 }

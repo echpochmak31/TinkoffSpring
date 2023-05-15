@@ -12,6 +12,7 @@ import ru.tinkoff.edu.java.parser.handlers.LinkHandler;
 import ru.tinkoff.edu.java.scrapper.dao.models.Link;
 import ru.tinkoff.edu.java.scrapper.dao.models.StackOverflowLink;
 import ru.tinkoff.edu.java.scrapper.dao.models.TgChat;
+import ru.tinkoff.edu.java.scrapper.dto.LinkUpdateMessage;
 import ru.tinkoff.edu.java.scrapper.scheduling.apihandlers.ApiHandler;
 import ru.tinkoff.edu.java.scrapper.scheduling.apihandlers.GitHubApiHandler;
 import ru.tinkoff.edu.java.scrapper.scheduling.apihandlers.StackOverflowApiHandler;
@@ -31,10 +32,8 @@ public class LinkUpdaterScheduler {
     private final ChatService chatService;
     private final LinkService linkService;
     private final StackOverflowLinkService stackOverflowLinkService;
-    private final StackOverflowApiService stackOverflowApiService;
-    private final GitHubApiService gitHubApiService;
 
-    private final BotHttpClient botHttpClient;
+    private final MessageSender messageSender;
     private final ApiHandler apiHandler;
     private final LinkHandler linkHandler;
 
@@ -45,7 +44,7 @@ public class LinkUpdaterScheduler {
 
     @Scheduled(fixedDelayString = "${app.scheduler.interval}")
     public void update() {
-        log.info("Update!");
+        log.info("Проверка обновлений");
 
         var linksWithUpdates = new ArrayList<Link>();
         var links = linkService.findOldest(duration);
@@ -58,7 +57,7 @@ public class LinkUpdaterScheduler {
             var apiHandlerResult = apiHandler.handle(parseResult, link);
 
             if (apiHandlerResult.hasUpdate()) {
-                log.info(apiHandlerResult.description());
+                log.info("Есть обновления для ссылки " + link.getUrl());
 
                 linksWithUpdates.add(link);
                 var chatIds = chatService
@@ -67,7 +66,15 @@ public class LinkUpdaterScheduler {
                         .map(TgChat::getChatId)
                         .toArray(Long[]::new);
 
-                botHttpClient.update(link.getLinkId(), link.getUrl(), apiHandlerResult.description(), chatIds);
+
+                var updateMessage = LinkUpdateMessage.builder()
+                        .linkId(link.getLinkId())
+                        .url(link.getUrl())
+                        .description(apiHandlerResult.description())
+                        .tgChatIds(chatIds)
+                        .build();
+
+                messageSender.sendToBot(updateMessage);
             }
         }
 
@@ -85,8 +92,5 @@ public class LinkUpdaterScheduler {
         stackOverflowLinkCache.clear();
     }
 
-    private void handleLink(Link link) {
-
-    }
 }
 

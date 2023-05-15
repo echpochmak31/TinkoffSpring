@@ -1,6 +1,10 @@
 app:
   test: testKey
   token: ${TELEGRAM_BOT_API_TOKEN}
+  scrapper-queue:
+    queue-name: "defaultQueue"
+    exchange-name: "defaultExchange"
+    routing-key: "defaultRoutingKey"
 
 springdoc:
   swagger-ui:
@@ -10,6 +14,10 @@ server:
   port: 8081
 
 meta:
+  rabbitmq:
+    hostname: "localhost"
+    user: ${SCRAPPER_RABBIT_MQ_USER}
+    password: ${SCRAPPER_RABBIT_MQ_PASSWORD}
   paths:
     help-command-md: "./bot/src/main/resources/helpCommand.md"
   scrapper:

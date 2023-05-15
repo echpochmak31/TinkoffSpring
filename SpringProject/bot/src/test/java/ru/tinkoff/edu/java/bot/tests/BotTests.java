@@ -7,6 +7,9 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,33 +25,35 @@ import ru.tinkoff.edu.java.bot.linkstracking.commands.DefaultUserMessageProcesso
 import ru.tinkoff.edu.java.bot.linkstracking.links.LinksRepository;
 import ru.tinkoff.edu.java.bot.linkstracking.replies.DefaultUserReplyProcessor;
 import ru.tinkoff.edu.java.bot.linkstracking.users.UserRepository;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import ru.tinkoff.edu.java.bot.services.ScrapperApiService;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@SuppressWarnings("checkstyle:RegexpSingleline")
 @ExtendWith(MockitoExtension.class)
 public class BotTests {
-    private static String text = "text";
     List<Update> updates;
     Update fakeUpdate;
+
     @Value("${meta.paths.help-command-md}")
     String path;
     LinksRepository linksRepository;
     LinkTrackerBot linkTrackerBot;
     @Mock
     TelegramBot bot;
+    @Mock
+    ScrapperApiService scrapperApiService;
     @Captor
     ArgumentCaptor<? extends BaseRequest<SendMessage, SendResponse>> sendMessageCaptor;
 
+    @SuppressWarnings("checkstyle:MultipleStringLiterals")
     private Update setupUpdate(String fakeText) {
         Message fakeMessage = new Message();
         Chat fakeChat = new Chat();
         Update result = new Update();
 
         ReflectionTestUtils.setField(fakeChat, "id", 1L);
-        ReflectionTestUtils.setField(fakeMessage, text, fakeText);
+        ReflectionTestUtils.setField(fakeMessage, "text", fakeText);
         ReflectionTestUtils.setField(fakeMessage, "chat", fakeChat);
         ReflectionTestUtils.setField(result, "message", fakeMessage);
 
@@ -59,11 +64,11 @@ public class BotTests {
     public void setup() {
         updates = new ArrayList<>();
 
-        linksRepository = new LinksRepository(new ArrayList<>());
+        linksRepository = new LinksRepository(scrapperApiService);
         var userInfoRepository = new UserRepository(new HashMap<>());
         var messageProcessor = new DefaultUserMessageProcessor(linksRepository, userInfoRepository, path);
         var replyProcessor = new DefaultUserReplyProcessor(linksRepository);
-        linkTrackerBot = new LinkTrackerBot("fakeToken", messageProcessor, replyProcessor);
+        linkTrackerBot = new LinkTrackerBot("fakeToken", messageProcessor, replyProcessor, scrapperApiService);
 
         ReflectionTestUtils.setField(linkTrackerBot, "bot", bot);
     }
@@ -85,8 +90,8 @@ public class BotTests {
         String realText = (String) value.getParameters().get("text");
 
         assertAll(
-                () -> assertEquals("/list", fakeUpdate.message().text()),
-                () -> assertEquals("Нет отслеживаемых ссылок", realText)
+            () -> assertEquals("/list", fakeUpdate.message().text()),
+            () -> assertEquals("Нет отслеживаемых ссылок", realText)
         );
 
     }
@@ -109,13 +114,13 @@ public class BotTests {
         String realText = (String) value.getParameters().get("text");
 
         assertAll(
-                () -> assertEquals("/list", fakeUpdate.message().text()),
-                () -> assertEquals("Отслеживаются следующие ссылки:\n\n" + link + "\n\n", realText)
+            () -> assertEquals("/list", fakeUpdate.message().text()),
+            () -> assertEquals("Отслеживаются следующие ссылки:\n\n" + link + "\n\n", realText)
         );
     }
 
+    */
 
-     */
     @Test
     public void unknownCommandTest() {
         // given
@@ -130,7 +135,7 @@ public class BotTests {
         Mockito.verify(bot).execute(sendMessageCaptor.capture());
 
         BaseRequest<SendMessage, SendResponse> value = sendMessageCaptor.getValue();
-        String realText = (String) value.getParameters().get(text);
+        String realText = (String) value.getParameters().get("text");
 
         assertAll(
             () -> assertEquals(unknownCommand, fakeUpdate.message().text()),
