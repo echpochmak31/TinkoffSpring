@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.scrapper.tests;
+package ru.tinkoff.edu.java.tests;
 
 import liquibase.Contexts;
 import liquibase.LabelExpression;
