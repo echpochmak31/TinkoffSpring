@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClientRequestException;
 import ru.tinkoff.edu.java.bot.linkstracking.commands.UserMessageProcessor;
 import ru.tinkoff.edu.java.bot.linkstracking.replies.UserReplyProcessor;
+import ru.tinkoff.edu.java.bot.metrics.BotMetrics;
 import ru.tinkoff.edu.java.bot.services.ScrapperApiService;
 import java.util.List;
 
@@ -81,6 +82,8 @@ public class LinkTrackerBot implements Bot {
                 execute(request);
             }
         }
+
+        BotMetrics.incrementUpdatesCounter(updates.size());
 
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
