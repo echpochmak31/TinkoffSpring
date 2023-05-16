@@ -2,7 +2,6 @@ package ru.tinkoff.edu.java.scrapper.services.jpa;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.dao.jpa.JpaChatRepository;
 import ru.tinkoff.edu.java.scrapper.dao.jpa.JpaLinkRepository;
@@ -11,11 +10,8 @@ import ru.tinkoff.edu.java.scrapper.dao.models.Link;
 import ru.tinkoff.edu.java.scrapper.dao.models.TgChat;
 import ru.tinkoff.edu.java.scrapper.exceptions.ResourceNotFoundException;
 import ru.tinkoff.edu.java.scrapper.services.LinkService;
-
 import java.time.Duration;
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.util.Date;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -33,16 +29,17 @@ public class JpaLinkService implements LinkService {
         var optionalChat = chatRepository.findById(tgChatId);
         var optionalLink = linkRepository.findByUrl(link);
 
-        if (optionalChat.isEmpty())
+        if (optionalChat.isEmpty()) {
             throw ResourceNotFoundException.chatNotFound(tgChatId);
+        }
 
         TgChat chat = optionalChat.get();
 
         if (optionalLink.isEmpty()) {
             var temporaryLink = Link.builder()
-                    .url(link)
-                    .lastCheck(OffsetDateTime.now())
-                    .build();
+                .url(link)
+                .lastCheck(OffsetDateTime.now())
+                .build();
 
             temporaryLink.addChatIfNotExists(chat);
             return linkRepository.saveAndFlush(temporaryLink);
@@ -59,11 +56,13 @@ public class JpaLinkService implements LinkService {
         var optionalChat = chatRepository.findById(tgChatId);
         var optionalLink = linkRepository.findByUrl(link);
 
-        if (optionalChat.isEmpty())
+        if (optionalChat.isEmpty()) {
             throw ResourceNotFoundException.chatNotFound(tgChatId);
+        }
 
-        if (optionalLink.isEmpty())
+        if (optionalLink.isEmpty()) {
             throw ResourceNotFoundException.linkNotFound(tgChatId, link);
+        }
 
         TgChat chat = optionalChat.get();
         Link result = optionalLink.get();
@@ -71,8 +70,12 @@ public class JpaLinkService implements LinkService {
         result.removeChat(chat);
         chatRepository.saveAndFlush(chat);
         if (result.getTgChats().isEmpty()) {
-            stackOverflowLinkRepository.deleteById(result.getLinkId());
-            linkRepository.deleteById(result.getLinkId());
+            if (stackOverflowLinkRepository.existsById(result.getLinkId())) {
+                stackOverflowLinkRepository.deleteById(result.getLinkId());
+            }
+            if (linkRepository.existsById(result.getLinkId())) {
+                linkRepository.deleteById(result.getLinkId());
+            }
         }
         return result;
     }

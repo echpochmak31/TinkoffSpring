@@ -1,8 +1,6 @@
 package ru.tinkoff.edu.java.bot.dto;
 
-import jakarta.validation.Valid;
 import lombok.NonNull;
-import org.springframework.validation.annotation.Validated;
 
 public record ApiErrorResponse(
         @NonNull

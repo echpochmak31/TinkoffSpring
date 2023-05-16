@@ -5,9 +5,6 @@ import com.pengrad.telegrambot.request.SendMessage;
 import lombok.AllArgsConstructor;
 import ru.tinkoff.edu.java.bot.linkstracking.links.LinksProvider;
 
-import java.util.List;
-import java.util.function.Supplier;
-
 @AllArgsConstructor
 public class ListCommand implements Command {
     private static final String listCommand = "/list";
@@ -28,8 +25,9 @@ public class ListCommand implements Command {
 
     @Override
     public SendMessage handle(Update update) {
-        if (linksProvider.getLinks(update.message().chat().id()).isEmpty())
+        if (linksProvider.getLinks(update.message().chat().id()).isEmpty()) {
             return new SendMessage(update.message().chat().id(), noLinksMessage);
+        }
 
         var stringBuilder = new StringBuilder();
         stringBuilder.append(executeMessage);

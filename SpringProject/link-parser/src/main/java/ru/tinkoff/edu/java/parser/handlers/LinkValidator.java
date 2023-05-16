@@ -13,6 +13,7 @@ public class LinkValidator implements LinkHandler {
         urlValidator = new UrlValidator();
         next = null;
     }
+
     @Override
     public void setNext(@NonNull LinkHandler next) {
         this.next = next;
@@ -23,8 +24,7 @@ public class LinkValidator implements LinkHandler {
         if (urlValidator.isValid(link) && next != null) {
             try {
                 return next.handle(link);
-            }
-            catch (LinkParserException exception) {
+            } catch (LinkParserException exception) {
                 return null;
             }
         }

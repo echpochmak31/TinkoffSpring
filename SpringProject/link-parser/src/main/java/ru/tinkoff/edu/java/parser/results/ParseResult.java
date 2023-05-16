@@ -8,6 +8,7 @@ public abstract class ParseResult {
     public ParseResult(@NonNull String url) {
         this.url = url;
     }
+
     public String getUrl() {
         return url;
     }
