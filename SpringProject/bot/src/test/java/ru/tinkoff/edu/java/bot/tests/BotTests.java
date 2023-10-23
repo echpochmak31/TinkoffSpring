@@ -26,6 +26,14 @@ import ru.tinkoff.edu.java.bot.linkstracking.links.LinksRepository;
 import ru.tinkoff.edu.java.bot.linkstracking.replies.DefaultUserReplyProcessor;
 import ru.tinkoff.edu.java.bot.linkstracking.users.UserRepository;
 import ru.tinkoff.edu.java.bot.services.ScrapperApiService;
+<<<<<<< HEAD:SpringProject/bot/src/test/java/ru/tinkoff/edu/java/bot/tests/BotTests.java
+=======
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+>>>>>>> b7ff886afca3e78096d2cca9c744685619d7e585:SpringProject/bot/src/test/java/BotTests.java
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -64,6 +72,11 @@ public class BotTests {
     public void setup() {
         updates = new ArrayList<>();
 
+<<<<<<< HEAD:SpringProject/bot/src/test/java/ru/tinkoff/edu/java/bot/tests/BotTests.java
+=======
+        Mockito.when(scrapperApiService.addLink())
+
+>>>>>>> b7ff886afca3e78096d2cca9c744685619d7e585:SpringProject/bot/src/test/java/BotTests.java
         linksRepository = new LinksRepository(scrapperApiService);
         var userInfoRepository = new UserRepository(new HashMap<>());
         var messageProcessor = new DefaultUserMessageProcessor(linksRepository, userInfoRepository, path);

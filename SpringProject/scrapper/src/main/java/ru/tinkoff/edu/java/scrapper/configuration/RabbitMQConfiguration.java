@@ -1,5 +1,7 @@
 package ru.tinkoff.edu.java.scrapper.configuration;
 
+import java.util.HashMap;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.Binding;
@@ -16,8 +18,6 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import java.util.HashMap;
-import java.util.Map;
 
 @Configuration
 @RequiredArgsConstructor
@@ -77,6 +77,7 @@ public class RabbitMQConfiguration {
             .bind(defaultQueue)
             .to(directExchange)
             .with(applicationConfig.routingKey());
+
     }
 
     @Bean

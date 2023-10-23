@@ -31,4 +31,5 @@ public class LinkUpdateMessageHandler {
             bot.execute(sendMessage);
         }
     }
+
 }
