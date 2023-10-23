@@ -1,3 +1,5 @@
+package ru.tinkoff.edu.java.tests;
+
 import liquibase.Contexts;
 import liquibase.LabelExpression;
 import liquibase.Liquibase;
@@ -10,20 +12,16 @@ import org.junit.jupiter.api.BeforeAll;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.transaction.TransactionManager;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
-
 import javax.sql.DataSource;
 import java.io.File;
 import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-
 
 @Testcontainers
 public abstract class IntegrationEnvironment {
@@ -34,24 +32,11 @@ public abstract class IntegrationEnvironment {
 
     static {
         POSTGRE_SQL_CONTAINER = new PostgreSQLContainer<>(DockerImageName.parse("postgres:15"))
-                .withDatabaseName("scrapper")
-                .withExposedPorts(5432, 5433);
+            .withDatabaseName("scrapper")
+            .withExposedPorts(5432, 5433);
 
         POSTGRE_SQL_CONTAINER.start();
 
-    }
-
-    @Configuration
-    static class IntegrationEnvironmentConfig {
-
-        @Bean
-        public DataSource dataSource() {
-            return DataSourceBuilder.create()
-                    .url(POSTGRE_SQL_CONTAINER.getJdbcUrl())
-                    .username(POSTGRE_SQL_CONTAINER.getUsername())
-                    .password(POSTGRE_SQL_CONTAINER.getPassword())
-                    .build();
-        }
     }
 
     @BeforeAll
@@ -63,18 +48,31 @@ public abstract class IntegrationEnvironment {
         connection = DriverManager.getConnection(url, user, password);
 
         Database database = DatabaseFactory.getInstance()
-                .findCorrectDatabaseImplementation(new JdbcConnection(connection));
+            .findCorrectDatabaseImplementation(new JdbcConnection(connection));
 
         String scrapperProjectPath = new File("").getAbsolutePath();
         Path projectPath = new File(scrapperProjectPath).toPath().getParent();
         File searchPath = projectPath.resolve("migrations").toFile();
 
         Liquibase liquibase = new liquibase.Liquibase(
-                "master.xml",
-                new FileSystemResourceAccessor(searchPath),
-                database
+            "master.xml",
+            new FileSystemResourceAccessor(searchPath),
+            database
         );
 
         liquibase.update(new Contexts(), new LabelExpression());
+    }
+
+    @Configuration
+    static class IntegrationEnvironmentConfig {
+
+        @Bean
+        public DataSource dataSource() {
+            return DataSourceBuilder.create()
+                .url(POSTGRE_SQL_CONTAINER.getJdbcUrl())
+                .username(POSTGRE_SQL_CONTAINER.getUsername())
+                .password(POSTGRE_SQL_CONTAINER.getPassword())
+                .build();
+        }
     }
 }

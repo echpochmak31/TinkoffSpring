@@ -9,9 +9,11 @@ public class HelpCommand implements Command {
     private static final String helpCommand = "/help";
     private static final String helpCommandDescription = "вывести окно с командами";
     private final String markdownMessage;
+
     public HelpCommand(@NonNull String markdownMessage) {
         this.markdownMessage = markdownMessage;
     }
+
     @Override
     public String command() {
         return helpCommand;

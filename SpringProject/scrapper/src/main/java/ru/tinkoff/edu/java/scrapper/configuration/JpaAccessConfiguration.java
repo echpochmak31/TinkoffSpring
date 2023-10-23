@@ -21,15 +21,17 @@ public class JpaAccessConfiguration {
 
     @Bean
     public JpaLinkService jpaLinkService(
-            JpaLinkRepository linkRepository,
-            JpaChatRepository chatRepository,
-            JpaStackOverflowLinkRepository stackOverflowLinkRepository
+        JpaLinkRepository linkRepository,
+        JpaChatRepository chatRepository,
+        JpaStackOverflowLinkRepository stackOverflowLinkRepository
     ) {
         return new JpaLinkService(linkRepository, chatRepository, stackOverflowLinkRepository);
     }
 
     @Bean
-    public JpaStackOverflowLinkService jpaStackOverflowLinkService(JpaStackOverflowLinkRepository stackOverflowLinkRepository) {
+    public JpaStackOverflowLinkService jpaStackOverflowLinkService(
+        JpaStackOverflowLinkRepository stackOverflowLinkRepository
+    ) {
         return new JpaStackOverflowLinkService(stackOverflowLinkRepository);
     }
 }

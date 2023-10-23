@@ -10,8 +10,6 @@ import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SetMyCommands;
 import com.pengrad.telegrambot.response.BaseResponse;
-import com.pengrad.telegrambot.response.SendResponse;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,7 +19,6 @@ import org.springframework.web.reactive.function.client.WebClientRequestExceptio
 import ru.tinkoff.edu.java.bot.linkstracking.commands.UserMessageProcessor;
 import ru.tinkoff.edu.java.bot.linkstracking.replies.UserReplyProcessor;
 import ru.tinkoff.edu.java.bot.services.ScrapperApiService;
-
 import java.util.List;
 
 @Service
@@ -33,10 +30,12 @@ public class LinkTrackerBot implements Bot {
     private final ScrapperApiService scrapperApiService;
 
     @Autowired
-    public LinkTrackerBot(@Value("${app.token}") String token,
-                          @Qualifier("defaultUserMessageProcessor") UserMessageProcessor userMessageProcessor,
-                          @Qualifier("defaultUserReplyProcessor") UserReplyProcessor userReplyProcessor,
-                          ScrapperApiService scrapperApiService) {
+    public LinkTrackerBot(
+        @Value("${app.token}") String token,
+        @Qualifier("defaultUserMessageProcessor") UserMessageProcessor userMessageProcessor,
+        @Qualifier("defaultUserReplyProcessor") UserReplyProcessor userReplyProcessor,
+        ScrapperApiService scrapperApiService
+    ) {
         bot = new TelegramBot(token);
         this.userMessageProcessor = userMessageProcessor;
         this.userReplyProcessor = userReplyProcessor;
@@ -59,23 +58,23 @@ public class LinkTrackerBot implements Bot {
     public int process(List<Update> updates) {
         try {
             updates.stream()
-                    .map(x -> x.message().chat().id())
-                    .distinct()
-                    .forEach(scrapperApiService::addTgChat);
+                .map(x -> x.message().chat().id())
+                .distinct()
+                .forEach(scrapperApiService::addTgChat);
 
             for (var update : updates) {
-                SendMessage request = isReply(update) ? userReplyProcessor.process(update) : userMessageProcessor.process(update);
+                SendMessage request =
+                    isReply(update) ? userReplyProcessor.process(update) : userMessageProcessor.process(update);
                 execute(request);
             }
 
-        }
-        catch (WebClientRequestException webClientRequestException) {
+        } catch (WebClientRequestException webClientRequestException) {
             log.error(webClientRequestException.toString());
 
             var chatIds = updates.stream()
-                    .map(x -> x.message().chat().id())
-                    .distinct()
-                    .toList();
+                .map(x -> x.message().chat().id())
+                .distinct()
+                .toList();
 
             for (long chatId : chatIds) {
                 SendMessage request = new SendMessage(chatId, "Сервис временно недоступен");
@@ -98,9 +97,9 @@ public class LinkTrackerBot implements Bot {
 
     private void setMyCommandsMenu() {
         BotCommand[] commands = userMessageProcessor.commands()
-                .stream()
-                .map(x -> new BotCommand(x.command(), x.description()))
-                .toArray(BotCommand[]::new);
+            .stream()
+            .map(x -> new BotCommand(x.command(), x.description()))
+            .toArray(BotCommand[]::new);
 
         SetMyCommands cmds = new SetMyCommands(commands);
         cmds.languageCode("ru");

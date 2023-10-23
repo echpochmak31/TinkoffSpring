@@ -6,7 +6,6 @@ out/
 
 ### Maven ###
 target/
-pom.xml
 
 ### docker ###
 .env

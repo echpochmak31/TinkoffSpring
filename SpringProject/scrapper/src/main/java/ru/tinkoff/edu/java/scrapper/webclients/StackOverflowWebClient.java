@@ -13,6 +13,7 @@ import ru.tinkoff.edu.java.scrapper.webclients.dto.stackoverflow.StackOverflowAp
 import ru.tinkoff.edu.java.scrapper.webclients.dto.stackoverflow.StackOverflowApiResponse;
 
 @RequiredArgsConstructor
+@SuppressWarnings("checkstyle:MultipleStringLiterals")
 public class StackOverflowWebClient {
     private static final String baseUrl = "https://api.stackexchange.com/2.3";
     private final WebClient webClient;
@@ -25,9 +26,9 @@ public class StackOverflowWebClient {
         HttpClient httpClient = HttpClient.create().resolver(DefaultAddressResolverGroup.INSTANCE).compress(true);
 
         WebClient newWebClient = WebClient.builder()
-                .clientConnector(new ReactorClientHttpConnector(httpClient))
-                .baseUrl(baseUrl)
-                .build();
+            .clientConnector(new ReactorClientHttpConnector(httpClient))
+            .baseUrl(baseUrl)
+            .build();
 
         return new StackOverflowWebClient(newWebClient);
     }
@@ -38,15 +39,15 @@ public class StackOverflowWebClient {
         multiValueMap.add("sort", "activity");
         multiValueMap.add("site", "stackoverflow");
         return webClient
-                .get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/questions/{questionId}")
-                        .queryParams(multiValueMap)
-                        .build(questionId)
-                )
-                .retrieve()
-                .bodyToMono(StackOverflowApiResponse.class)
-                .block();
+            .get()
+            .uri(uriBuilder -> uriBuilder
+                .path("/questions/{questionId}")
+                .queryParams(multiValueMap)
+                .build(questionId)
+            )
+            .retrieve()
+            .bodyToMono(StackOverflowApiResponse.class)
+            .block();
     }
 
     public StackOverflowApiCommentsResponse getComments(@NonNull @Min(0) Long questionId) {
@@ -56,14 +57,14 @@ public class StackOverflowWebClient {
         multiValueMap.add("site", "stackoverflow");
 
         return webClient
-                .get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/questions/{questionId}/comments")
-                        .queryParams(multiValueMap)
-                        .build(questionId)
-                )
-                .retrieve()
-                .bodyToMono(StackOverflowApiCommentsResponse.class)
-                .block();
+            .get()
+            .uri(uriBuilder -> uriBuilder
+                .path("/questions/{questionId}/comments")
+                .queryParams(multiValueMap)
+                .build(questionId)
+            )
+            .retrieve()
+            .bodyToMono(StackOverflowApiCommentsResponse.class)
+            .block();
     }
 }

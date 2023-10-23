@@ -4,8 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
+@SuppressWarnings("checkstyle:MultipleStringLiterals")
 public class ResourceNotFoundException extends ScrapperException {
-    private ResourceNotFoundException(String message) {
+    protected ResourceNotFoundException(String message) {
         super(message);
     }
 
@@ -13,7 +14,7 @@ public class ResourceNotFoundException extends ScrapperException {
         return new ResourceNotFoundException("Chat " + tgChatId + " not found.");
     }
 
-    public static ResourceNotFoundException linkNotFound(long tgChatId, String url){
+    public static ResourceNotFoundException linkNotFound(long tgChatId, String url) {
         return new ResourceNotFoundException("In chat " + tgChatId + "link " + url + " not found.");
     }
 }

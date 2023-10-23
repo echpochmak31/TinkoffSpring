@@ -11,11 +11,12 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQDlqConfiguration {
     private final ApplicationConfig applicationConfig;
 
+    @SuppressWarnings("checkstyle:MultipleStringLiterals")
     @Bean
     public Queue deadLetterQueue() {
         return QueueBuilder
-                .durable(applicationConfig.scrapperQueue().queueName() + ".dlq")
-                .build();
+            .durable(applicationConfig.scrapperQueue().queueName() + ".dlq")
+            .build();
     }
 
 //    @Bean
@@ -26,8 +27,8 @@ public class RabbitMQDlqConfiguration {
     @Bean
     public Binding deadLetterQueueBinding(@Qualifier("deadLetterQueue") Queue dlq, DirectExchange directExchange) {
         return BindingBuilder
-                .bind(dlq)
-                .to(directExchange)
-                .with(applicationConfig.scrapperQueue().routingKey() + ".dlq");
+            .bind(dlq)
+            .to(directExchange)
+            .with(applicationConfig.scrapperQueue().routingKey() + ".dlq");
     }
 }
