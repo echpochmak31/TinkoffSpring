@@ -39,6 +39,27 @@ spring:
   liquibase:
     change-log: migrations/master.xml
 
+management:
+  server:
+    port: 8084
+  endpoints:
+    enabled-by-default: true
+    web:
+      base-path: "/"
+      exposure:
+        include: [ "info", "health", "prometheus" ]
+      path-mapping:
+        prometheus: metrics
+  endpoint:
+    info.enabled: true
+    health:
+      enabled: true
+      show-details: always
+    prometheus.enabled: true
+  prometheus.metrics.export.enabled: true
+  metrics.tags:
+      application: 'scrapper'
+
 meta:
   rabbitmq:
     hostname: "localhost"
