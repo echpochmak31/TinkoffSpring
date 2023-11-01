@@ -19,7 +19,7 @@ java-telegram-bot-api](https://github.com/pengrad/java-telegram-bot-api).
 
 
 ## Особенности:
-- Приложение построено на фреймфорке Spring Boot
+- Приложение построено на фреймворке Spring Boot
 - Docker compose для инфраструктуры приложения
 - В качетсве базы данных я выбрал PostgreSQL 15
 - Liquibase для версионирование БД
